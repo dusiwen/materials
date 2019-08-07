@@ -157,6 +157,15 @@ class ReportController extends Controller
 //            $weight = hexdec(substr($array[$i-4],54,4)); //16进制转为10进制获取重量
 //            dd($weight);
             $date = DB::table("stockin")->where("id",$id)->get(); //获取入库单信息
+            $StockIn_MaterialCode = DB::table("stockin")->where("time",$date[0]->time)->get(); //获取物资编码
+            //将物资对应的数量存入物资表中(materials)
+            foreach ($StockIn_MaterialCode as $k=>$v){
+                $StockIn_Number = $v->StockIn_Number;//获取入库单中对应物资的数量
+                $sumss = DB::table("materials")->where("MaterialCode",$v->StockIn_MaterialCode)->get();//获取物资表中对应物资的数量
+                $sumsss = intval($StockIn_Number)+intval($sumss[0]->sum);
+//                return Response::make($sumsss,404);
+                DB::table("materials")->where("MaterialCode",$v->StockIn_MaterialCode)->update(["sum"=>$sumsss]);//更改对应物资的数量(可能多物资)
+            }
 
             $StockIn_EachWeight = $date[0]->StockIn_EachWeight;  //获取入库单物资单个重量
 //            $WMNumber = 5.7/$StockIn_EachWeight;  //根据入库单单个重量算出盘点数量
