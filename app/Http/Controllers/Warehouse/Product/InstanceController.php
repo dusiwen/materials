@@ -16,8 +16,15 @@ class InstanceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $time = $request->get("page");
+        //获取所选入库单的物资详情
+        $maiterials = DB::table("stockout")->where("time",$time)->get()->toArray();
+        $i = 1;
+//        dd($maiterials);
+
+
         $warehouseProductInstances = WarehouseProductInstance::with(['warehouseProduct' => function ($query) {
             $query->orderByDesc('id');
         }, 'factory'])
@@ -25,7 +32,10 @@ class InstanceController extends Controller
             ->whereNotIn('status', ['SCRAP'])
             ->orderByDesc('id')
             ->paginate();
-        return view($this->view('index'), ['warehouseProductInstances' => $warehouseProductInstances]);
+        return view($this->view('index'), ['warehouseProductInstances' => $warehouseProductInstances,
+            "maiterials"=>$maiterials,
+            "i"=>$i,
+            "time"=>$time]);
     }
 
     private function view($viewName)
@@ -111,6 +121,7 @@ class InstanceController extends Controller
     }
 
     /**
+     * 扫码确认,数量无误后修改状态为未出库
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
@@ -119,7 +130,19 @@ class InstanceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            $time = $request->get("time");
+            DB::table("stockout")->where("time",$time)->update(["StockOut_Status"=>"未出库"]);
+        } catch (ModelNotFoundException $exception) {
+            return Response::make('数据不存在', 404);
+        } catch (\Exception $exception) {
+            $exceptionMessage = $exception->getMessage();
+            $exceptionLine = $exception->getLine();
+            $exceptionFile = $exception->getFile();
+            // dd("{$exceptionMessage}「{$exceptionLine}:{$exceptionFile}」");
+            // return back()->withInput()->with('danger',"{$exceptionMessage}「{$exceptionLine}:{$exceptionFile}」");
+            return Response::make("意外错误", 500);
+        }
     }
 
     /**

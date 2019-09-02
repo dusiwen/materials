@@ -10,97 +10,243 @@
     <link rel="stylesheet" href="/AdminLTE/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
 @endsection
 @section('content')
-    <section class="content">
-        @include('Layout.alert')
+    @include('Layout.alert')
+    @if($type =="stockin")
+    <section class="invoice" style="font-size: 18px;">
         <div class="row">
-            <form action="">
-                <div class="col-md-12">
-                    <div class="box box-default">
-                        <div class="box-header with-border">
-                            <h1 class="box-title">筛选</h1>
-                            {{--右侧最小化按钮--}}
-                            <div class="box-tools pull-right">
-                                <button class="btn btn-info btn-flat">筛选</button>
-                            </div>
-                        </div>
-                        <div class="box-body form-horizontal">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">种类</div>
-                                        <select id="selCategory" name="category_unique_code" class="form-control select2" style="width:100%;" onchange="fnGetEntireModelByCategoryUniqueCode()">
-                                            <option value="">全部</option>
-                                            @foreach(\App\Model\Category::all() as $category)
-                                                <option value="{{$category->unique_code}}" {{request()->get('category_unique_code') == $category->unique_code ? 'selected' : ''}}>{{$category->name}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">类型</div>
-                                        <select id="selEntireModel" name="entire_model_unique_code" class="form-control select2" style="width:100%;"></select>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">时间段</div>
-                                        <input name="date" type="text" class="form-control pull-right" id="date" value="{{request()->get('date',date("Y-m-d").'~'.date("Y-m-d"))}}">
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">厂家</div>
-                                        <select name="factory_name" class="form-control select2" style="width: 100%;">
-                                            <option value="">全部</option>
-                                            @foreach(\App\Model\Factory::all() as $factory)
-                                                <option value="{{$factory->name}}" {{request()->get('factory_name') == $factory->name ? 'selected' : ''}}>{{$factory->name}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </form>
-            <div class="col-md-12">
-                <div class="box box-default">
-                    <div class="box-header with-border">
-                        <h1 class="box-title">质量报告</h1>
-                        {{--右侧最小化按钮--}}
-                        <div class="box-tools pull-right"></div>
-                    </div>
-                    <div class="box-body table-responsive">
-                        <table class="table table-hover table-condensed">
-                            <thead>
-                            <tr>
-                                <th>种类</th>
-                                <th>类型</th>
-                                <th>厂家</th>
-                                <th>总数</th>
-                                <th>重复检修</th>
-                                <th>返修率</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($fixWorkflowCounts as $fixWorkflowCount)
-                                <tr style="cursor: pointer;" onclick="location.href='{{url('report/quality',$fixWorkflowCount['entire_model_unique_code'])}}?date={{request()->get('date')}}&factory_name={{request()->get('factory_name')}}'">
-                                    <td>{{$fixWorkflowCount['category_name']}}</td>
-                                    <td>{{$fixWorkflowCount['entire_model_name']}}</td>
-                                    <td>{{$fixWorkflowCount['factory_name']}}</td>
-                                    <td>{{$fixWorkflowCount['total_count']}}</td>
-                                    <td>{{$fixWorkflowCount['many_fix_count']}}</td>
-                                    <td>{{$fixWorkflowCount['rate']}}%</td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+            <div class="col-xs-12">
+                <h2 class="page-header">
+                    <i class="fa fa-globe"></i> 物资入库单
+{{--                    <small class="pull-right">日期：{{}}</small>--}}
+                </h2>
+            </div>
+        </div>
+        <div class="row invoice-info">
+            <div class="col-sm-6 invoice-col">
+{{--                <strong>基本信息</strong>--}}
+                <address>
+                    单位：<br>
+                    资金来源：<br>
+                    物料凭证号：<br>
+                    库存地点：<br>
+                    入库日期：{{date("Y-m-d H:i:s",$StockIn_time)}}<br>
+                </address>
+            </div>
+            <div class="col-sm-6 invoice-col">
+{{--                <strong>安装位置信息</strong>--}}
+                <address>
+                    收货方：<br>
+                    采购订单号：<br>
+                    会计凭证号：<br>
+                    供货单位：<br>
+                    合同编号：<br>
+                </address>
+            </div>
+        </div>
+
+        <div class="box-body table-responsive">
+            <table class="table table-hover table-condensed" id="table">
+                <thead>
+                <tr>
+                        <th>物资编码</th>
+                        <th>物资名称</th>
+                        <th>批次</th>
+                        <th>单位</th>
+                        <th>数量</th>
+                        <th>单价(元)</th>
+                        <th>金额(元)</th>
+                        <th>WBS元素</th>
+                        <th>备注</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($stockin as $v)
+                        <tr>
+                            <th>{{$v->StockIn_MaterialCode}}</th>
+                            <th>{{$v->StockIn_MaterialName}}</th>
+                            <th>{{$v->StockIn_Batch}}</th>
+                            <th>{{$v->StockIn_Unit}}</th>
+                            <th>{{$v->StockIn_Number}}</th>
+                            <th>{{$v->StockIn_Price}}</th>
+                            <th>{{$v->StockIn_Sum}}</th>
+                            <th>{{$v->WBS}}</th>
+                            <th>{{$v->StockIn_Remark}}</th>
+                        </tr>
+                @endforeach
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th>合计</th>
+                    <th></th>
+                    <th>{{$StockIn_Number}}</th>
+                    <th></th>
+                    <th>{{$StockIn_Sum}}</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th>负责:</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>保管:</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+{{--        <div class="row">--}}
+{{--            <div class="col-xs-6">--}}
+{{--            </div>--}}
+{{--            <div class="col-xs-6">--}}
+{{--                <p class="lead">统计</p>--}}
+{{--                <div class="table-responsive">--}}
+{{--                    <table class="table">--}}
+{{--                                                @foreach($ware as $warehouseProductUniqueCode => $warehouseProductInstanceCount)--}}
+{{--                                                    <tr>--}}
+{{--                                                        <th>{{$warehouseProductUniqueCode}}</th>--}}
+{{--                                                        <td>{{$warehouseProductInstanceCount}}&nbsp;件</td>--}}
+{{--                                                    </tr>--}}
+{{--                                                @endforeach--}}
+{{--                        <tr>--}}
+{{--                            <th>负责</th>--}}
+{{--                        </tr>--}}
+{{--                                                    <tr>--}}
+{{--                                                        <th>保管</th>--}}
+{{--                                                    </tr>--}}
+{{--                    </table>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+        <div class="row no-print">
+            <div class="col-xs-12">
+                <a href="{{url('warehouse/report')}}?page={{request()->get('page',1)}}&direction={{request()->get('direction')}}&created_at={{request()->get('created_at')}}&category_unique_code={{request()->get('category_unique_code')}}&type={{request()->get('type')}}" class="btn btn-default pull-left btn-flat"><i class="fa fa-arrow-left">&nbsp;</i>返回</a>
+                <a href="{{url('warehouse/report',$time)}}?type=print&types=stockin" target="_blank" class="btn btn-primary pull-right btn-flat"><i class="fa fa-print"></i> 打印</a>
             </div>
         </div>
     </section>
+    @elseif($type =="stockout")
+        <section class="invoice" style="font-size: 18px;">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h2 class="page-header">
+                        <i class="fa fa-globe"></i> 物资出库单
+                        {{--                    <small class="pull-right">日期：{{}}</small>--}}
+                    </h2>
+                </div>
+            </div>
+            <div class="row invoice-info">
+                <div class="col-sm-6 invoice-col">
+                    {{--                <strong>基本信息</strong>--}}
+                    <address>
+                        单位：<br>
+                        库存地点：<br>
+                        采购订单号：<br>
+                        项目名称：<br>
+                        项目消耗：<br>
+                        合同编号：<br>
+                    </address>
+                </div>
+                <div class="col-sm-6 invoice-col">
+                    {{--                <strong>安装位置信息</strong>--}}
+                    <address>
+                        领用单位：<br>
+                        会计凭证号：<br>
+                        物料凭证号：<br>
+                        出库日期：{{date("Y-m-d H:i:s",$StockIn_time)}}<br>
+                        预留号：<br>
+                    </address>
+                </div>
+            </div>
+
+            <div class="box-body table-responsive">
+                <table class="table table-hover table-condensed" id="table">
+                    <thead>
+                    <tr>
+                        <th>物资编码</th>
+                        <th>物资名称</th>
+                        <th>批次</th>
+                        <th>单位</th>
+                        <th>数量</th>
+                        <th>单价(元)</th>
+                        <th>金额(元)</th>
+                        <th>备注</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($stockin as $v)
+                        <tr>
+                            <th>{{$v->StockOut_MaterialCode}}</th>
+                            <th>{{$v->StockOut_MaterialName}}</th>
+                            <th>{{$v->StockOut_Batch}}</th>
+                            <th>{{$v->StockOut_Unit}}</th>
+                            <th>{{$v->StockOut_Number}}</th>
+                            <th>{{$v->StockOut_Price}}</th>
+                            <th>{{$v->StockOut_Sum}}</th>
+                            <th>{{$v->StockOut_Remark}}</th>
+                        </tr>
+                    @endforeach
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th>合计</th>
+                        <th></th>
+                        <th>{{$StockIn_Number}}</th>
+                        <th></th>
+                        <th>{{$StockIn_Sum}}</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th>负责:</th>
+                        <th>保管:</th>
+                        <th></th>
+                        <th>领料:</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            {{--        <div class="row">--}}
+            {{--            <div class="col-xs-6">--}}
+            {{--            </div>--}}
+            {{--            <div class="col-xs-6">--}}
+            {{--                <p class="lead">统计</p>--}}
+            {{--                <div class="table-responsive">--}}
+            {{--                    <table class="table">--}}
+            {{--                                                @foreach($ware as $warehouseProductUniqueCode => $warehouseProductInstanceCount)--}}
+            {{--                                                    <tr>--}}
+            {{--                                                        <th>{{$warehouseProductUniqueCode}}</th>--}}
+            {{--                                                        <td>{{$warehouseProductInstanceCount}}&nbsp;件</td>--}}
+            {{--                                                    </tr>--}}
+            {{--                                                @endforeach--}}
+            {{--                        <tr>--}}
+            {{--                            <th>负责</th>--}}
+            {{--                        </tr>--}}
+            {{--                                                    <tr>--}}
+            {{--                                                        <th>保管</th>--}}
+            {{--                                                    </tr>--}}
+            {{--                    </table>--}}
+            {{--                </div>--}}
+            {{--            </div>--}}
+            {{--        </div>--}}
+            <div class="row no-print">
+                <div class="col-xs-12">
+                    <a href="{{url('warehouse/report')}}?page={{request()->get('page',1)}}&direction={{request()->get('direction')}}&created_at={{request()->get('created_at')}}&category_unique_code={{request()->get('category_unique_code')}}&type={{request()->get('type')}}" class="btn btn-default pull-left btn-flat"><i class="fa fa-arrow-left">&nbsp;</i>返回</a>
+                    <a href="{{url('warehouse/report',$time)}}?type=print&types=stockout" target="_blank" class="btn btn-primary pull-right btn-flat"><i class="fa fa-print"></i> 打印</a>
+                </div>
+            </div>
+        </section>
+    @endif
+    <div class="clearfix"></div>
+    </div>
 @endsection
 @section('script')
     <script src="/AdminLTE/bower_components/select2/dist/js/select2.full.min.js"></script>
@@ -117,63 +263,10 @@
                 radioClass: 'iradio_minimal-blue'
             });
             //Date picker
-            $('#date').daterangepicker({
-                locale: {
-                    format: "YYYY-MM-DD",
-                    separator: "~",
-                    daysOfWeek: ["日", "一", "二", "三", "四", "五", "六"],
-                    monthNames: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"]
-                }
+            $('#datepicker').datepicker({
+                autoclose: true,
+                format: 'yyyy-mm-dd'
             });
-
-            fnGetEntireModelByCategoryUniqueCode();
         });
-
-        /**
-         * 删除
-         * @param {int} id 编号
-         */
-        fnDelete = id => {
-            $.ajax({
-                url: `{{url('report/quality')}}/${id}`,
-                type: "delete",
-                data: {},
-                success: function (response) {
-                    // console.log('success:', response);
-                    alert(response);
-                    location.reload();
-                },
-                error: function (error) {
-                    console.log('fail:', error);
-                }
-            });
-        };
-
-        /**
-         * 根据种类获取型号
-         */
-        fnGetEntireModelByCategoryUniqueCode = () => {
-            if ($("#selCategory").val()) {
-                $.ajax({
-                    url: `{{url('category')}}/${$("#selCategory").val()}`,
-                    type: "get",
-                    data: {},
-                    async: true,
-                    success: function (response) {
-                        console.log('success:', response);
-                        html = `<option value="">全部</option>`;
-                        for (let key in response) {
-                            html += `<option value="${response[key].unique_code}" ${response[key].unique_code == "{{request()->get('entire_model_unique_code')}}" ? 'selected' : ''}>${response[key].name}</option>`;
-                        }
-                        $("#selEntireModel").html(html);
-                    },
-                    error: function (error) {
-                        // console.log('fail:', error);
-                        if (error.status == 401) location.href = "{{url('login')}}";
-                        alert(error.responseText);
-                    },
-                });
-            }
-        };
     </script>
 @endsection

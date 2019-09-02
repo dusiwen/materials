@@ -24,90 +24,41 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">物资名称：</label>
                             <div class="col-sm-10 col-md-8">
-                                <a href="javascript:" class="btn btn-flat btn-lg btn-default" onclick="fnCreateEntireModelIdCode()">物资选择</a>&nbsp;&nbsp;&nbsp;
+                                <a href="javascript:" class="btn btn-flat btn-lg btn-default" onclick="fnCreateEntireModelIdCode()">物资选择</a>&nbsp;&nbsp;&nbsp;{{$MaterialName}}
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">入库类型：</label>
+                            <label class="col-sm-3 control-label">出库类型：</label>
                             <div class="col-sm-10 col-md-8">
-                                <select id="selCategory" name="StockIn_Type" class="form-control select2" style="width: 100%;" onchange="fnGetPartModelByCategoryUniqueCode(this.value)">
-{{--                                    @foreach($sockin_type as $v)--}}
-{{--                                        <option value="{{$v->sockin_type}}">{{$v->sockin_type}}</option>--}}
-{{--                                    @endforeach--}}
+                                <select id="selCategory" name="StockOut_Type" class="form-control select2" style="width: 100%;" onchange="fnGetPartModelByCategoryUniqueCode(this.value)">
+                                    @foreach($stockout_type as $v)
+                                        <option value="{{$v->stockout_type}}">{{$v->stockout_type}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
-                        {{--                        <div class="form-group">--}}
-                        {{--                            <label class="col-sm-3 control-label">仓储类型：</label>--}}
-                        {{--                            <div class="col-sm-10 col-md-8">--}}
-                        {{--                                <select id="selCategory" name="StorageType" class="form-control select2" style="width: 100%;" onchange="fnGetPartModelByCategoryUniqueCode(this.value)">--}}
-                        {{--                                    <option value="H01">H01</option>--}}
-                        {{--                                    <option value="G01">G01</option>--}}
-                        {{--                                    <option value="D01">D01</option>--}}
-                        {{--                                    <option value="C01">C01</option>--}}
-                        {{--                                    <option value="C02">C02</option>--}}
-                        {{--                                    <option value="C03">C03</option>--}}
-                        {{--                                </select>--}}
-                        {{--                            </div>--}}
-                        {{--                        </div>--}}
                         <div class="form-group">
                             <label class="col-sm-3 control-label">项目名称：</label>
                             <div class="col-sm-10 col-md-8">
                                 <select id="selCategory" name="project_name" class="form-control select2" style="width: 100%;" onchange="fnGetPartModelByCategoryUniqueCode(this.value)">
-{{--                                    @foreach($project as $v)--}}
-{{--                                        <option value="{{$v->project_name}}">{{$v->project_name}}</option>--}}
-{{--                                    @endforeach--}}
+                                    @foreach($project as $v)
+                                        <option value="{{$v->project_name}}">{{$v->project_name}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
-                        {{--                        <div class="form-group">--}}
-                        {{--                            <label class="col-sm-3 control-label">物资编码：</label>--}}
-                        {{--                            <div class="col-sm-10 col-md-8">--}}
-                        {{--                                <input placeholder="物资编码" class="form-control" type="text" required autofocus onkeydown="if(event.keyCode==13){return false;}"--}}
-                        {{--                                       name="StockIn_MaterialCode" value="">--}}
-                        {{--                            </div>--}}
-                        {{--                        </div>--}}
-                        {{--                        <div class="form-group">--}}
-                        {{--                            <label class="col-sm-3 control-label">物资名称：</label>--}}
-                        {{--                            <div class="col-sm-10 col-md-8">--}}
-                        {{--                                <input placeholder="物资名称" class="form-control" type="text" required autofocus onkeydown="if(event.keyCode==13){return false;}"--}}
-                        {{--                                       name="StockIn_MaterialName" value="">--}}
-                        {{--                            </div>--}}
-                        {{--                        </div>--}}
-                        {{--                        <div class="form-group">--}}
-                        {{--                            <label class="col-sm-3 control-label">批次：</label>--}}
-                        {{--                            <div class="col-sm-10 col-md-8">--}}
-                        {{--                                <input placeholder="批次" class="form-control" type="text" required autofocus onkeydown="if(event.keyCode==13){return false;}"--}}
-                        {{--                                       name="StockIn_Batch" value="">--}}
-                        {{--                            </div>--}}
-                        {{--                        </div>--}}
-                        {{--                        <div class="form-group">--}}
-                        {{--                            <label class="col-sm-3 control-label">单位：</label>--}}
-                        {{--                            <div class="col-sm-10 col-md-8">--}}
-                        {{--                                <input placeholder="单位" class="form-control" type="text" required autofocus onkeydown="if(event.keyCode==13){return false;}"--}}
-                        {{--                                       name="StockIn_Unit" value="">--}}
-                        {{--                            </div>--}}
-                        {{--                        </div>--}}
-
                         <div class="form-group">
                             <label class="col-sm-3 control-label">总数量：</label>
                             <div class="col-sm-10 col-md-8">
                                 <input placeholder="数量" class="form-control" type="text" required autofocus onkeydown="if(event.keyCode==13){return false;}"
-                                       name="StockIn_Number" value="">
+                                       name="StockOut_Number" value="">
                             </div>
                         </div>
-                        {{--                        <div class="form-group">--}}
-                        {{--                            <label class="col-sm-3 control-label">每个重量(kg)：</label>--}}
-                        {{--                            <div class="col-sm-10 col-md-8">--}}
-                        {{--                                <input placeholder="数量" class="form-control" type="text" required autofocus onkeydown="if(event.keyCode==13){return false;}"--}}
-                        {{--                                       name="StockIn_EachWeight" value="">--}}
-                        {{--                            </div>--}}
-                        {{--                        </div>--}}
                         <div class="form-group">
                             <label class="col-sm-3 control-label">单价：</label>
                             <div class="col-sm-10 col-md-8">
                                 <input placeholder="单价" class="form-control" type="text" required autofocus onkeydown="if(event.keyCode==13){return false;}"
-                                       name="StockIn_Price" value="">
+                                       name="StockOut_Price" value="">
                             </div>
                         </div>
 
@@ -116,7 +67,7 @@
                         {{--                            <label class="col-sm-3 control-label">金额：</label>--}}
                         {{--                            <div class="col-sm-10 col-md-8">--}}
                         {{--                                <input placeholder="金额" class="form-control" type="text" required autofocus onkeydown="if(event.keyCode==13){return false;}"--}}
-                        {{--                                       name="StockIn_Sum" value="">--}}
+                        {{--                                       name="StockOut_Sum" value="">--}}
                         {{--                            </div>--}}
                         {{--                        </div>--}}
                         {{--                        <div class="form-group">--}}
@@ -130,43 +81,9 @@
                             <label class="col-sm-3 control-label">备注：</label>
                             <div class="col-sm-10 col-md-8">
                                 <input placeholder="备注" class="form-control" type="text" required autofocus onkeydown="if(event.keyCode==13){return false;}"
-                                       name="StockIn_Remark" value="">
+                                       name="StockOut_Remark" value="">
                             </div>
                         </div>
-                        {{--                        <div class="form-group">--}}
-                        {{--                            <label class="col-sm-3 control-label text-sm">设备类型统一代码：</label>--}}
-                        {{--                            <div class="col-sm-10 col-md-8">--}}
-                        {{--                                <input placeholder="设备类型统一代码" class="form-control disabled" disabled type="text" required onkeydown="if(event.keyCode==13){return false;}"--}}
-                        {{--                                       name="unique_code" value="">--}}
-                        {{--                            </div>--}}
-                        {{--                        </div>--}}
-                        {{--                        <div class="form-group">--}}
-                        {{--                            <label class="col-sm-3 control-label">设备种类：</label>--}}
-                        {{--                            <div class="col-sm-10 col-md-8">--}}
-                        {{--                                <select id="selCategory" name="category_unique_code" class="form-control select2" style="width: 100%;" onchange="fnGetPartModelByCategoryUniqueCode(this.value)">--}}
-                        {{--                                    @foreach($categories as $categoryUniqueCode => $categoryName)--}}
-                        {{--                                        <option value="{{$categoryUniqueCode}}" {{$categoryUniqueCode == $entireModel->category_unique_code ? 'selected' : ''}}>{{$categoryUniqueCode .' ： '.$categoryName}}</option>--}}
-                        {{--                                    @endforeach--}}
-                        {{--                                </select>--}}
-                        {{--                            </div>--}}
-                        {{--                        </div>--}}
-                        {{--                        <div class="form-group">--}}
-                        {{--                            <label class="col-sm-3 control-label text-sm">维修周期单位：</label>--}}
-                        {{--                            <div class="col-sm-10 col-md-8">--}}
-                        {{--                                <select name="fix_cycle_unit" class="form-control select2" style="width: 100%;">--}}
-                        {{--                                    @foreach(\App\Model\EntireModel::$FIX_CYCLE_UNIT as $fixCycleUnitKey => $fixCycleUnitValue)--}}
-                        {{--                                        <option value="{{$fixCycleUnitKey}}" {{$fixCycleUnitKey == $entireModel->prototype('fix_cycle_unit') ? 'selected' : ''}}>{{$fixCycleUnitValue}}</option>--}}
-                        {{--                                    @endforeach--}}
-                        {{--                                </select>--}}
-                        {{--                            </div>--}}
-                        {{--                        </div>--}}
-                        {{--                        <div class="form-group">--}}
-                        {{--                            <label class="col-sm-3 control-label text-sm">维修周期长度：</label>--}}
-                        {{--                            <div class="col-sm-10 col-md-8">--}}
-                        {{--                                <input placeholder="维修周期长度" class="form-control" type="number" min="1" max="99" step="1" required onkeydown="if(event.keyCode==13){return false;}"--}}
-                        {{--                                       name="fix_cycle_value" value="">--}}
-                        {{--                            </div>--}}
-                        {{--                        </div>--}}
                         <div class="box-footer">
                             <a href="{{url('warehouse/report')}}?page={{request()->get('page',1)}}" class="btn btn-default btn-flat pull-left"><i class="fa fa-arrow-left">&nbsp;</i>返回</a>
                             <a href="javascript:" onclick="fnUpdate()" class="btn btn-warning btn-flat pull-right"><i class="fa fa-check">&nbsp;</i>添加</a>
@@ -197,32 +114,25 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-{{--                                @foreach($stockinTest as $v)--}}
-{{--                                    <tr>--}}
-{{--                                        <th>{{$i++}}</th>--}}
-{{--                                        <th>{{$v->StockIn_MaterialCode}}</th>--}}
-{{--                                        <th>{{$v->StockIn_MaterialName}}</th>--}}
-{{--                                        <th>{{$v->StockIn_Unit}}</th>--}}
-{{--                                        <th>{{$v->StockIn_Number}}</th>--}}
-{{--                                        <th>{{$v->StockIn_Weight}}</th>--}}
-{{--                                        <th>{{$v->StockIn_Price}}</th>--}}
-{{--                                        <th>{{$v->StockIn_Sum}}</th>--}}
-{{--                                        <th>{{$v->StockIn_Remark}}</th>--}}
-{{--                                        <td>--}}
+                                @foreach($stockouttest as $v)
+                                    <tr>
+                                        <th>{{$i++}}</th>
+                                        <th>{{$v->StockOut_MaterialCode}}</th>
+                                        <th>{{$v->StockOut_MaterialName}}</th>
+                                        <th>{{$v->StockOut_Unit}}</th>
+                                        <th>{{$v->StockOut_Number}}</th>
+                                        <th>{{$v->StockOut_Weight}}</th>
+                                        <th>{{$v->StockOut_Price}}</th>
+                                        <th>{{$v->StockOut_Sum}}</th>
+                                        <th>{{$v->StockOut_Remark}}</th>
+                                        <td>
 
-{{--                                            <div class="btn-group btn-group-lg">--}}
-{{--                                                <a href="javascript:" onclick="fnDelete({{$v->id}})" class="btn btn-danger btn-flat">删除</a>--}}
-{{--                                            </div>--}}
-{{--                                        </td>--}}
-{{--                                        --}}{{--                                    <td>--}}
-
-{{--                                        --}}{{--                                        <div class="btn-group btn-group-lg">--}}
-{{--                                        --}}{{--                                            <a href="{{url('warehouse/report',$warehouseReport->serial_number)}}?page={{request()->get('page',1)}}&direction={{request()->get('direction')}}&updated_at={{request()->get('updated_at')}}&category_unique_code={{request()->get('category_unique_code')}}&type={{request()->get('type')}}" class="btn btn-primary btn-flat">查看</a>--}}
-{{--                                        --}}{{--                                            <a href="javascript:" onclick="fnDelete({{$warehouseReport->serial_number}})" class="btn btn-danger btn-flat">删除</a>--}}
-{{--                                        --}}{{--                                        </div>--}}
-{{--                                        --}}{{--                                    </td>--}}
-{{--                                    </tr>--}}
-{{--                                @endforeach--}}
+                                            <div class="btn-group btn-group-lg">
+                                                <a href="javascript:" onclick="fnDelete({{$v->id}})" class="btn btn-danger btn-flat">删除</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -249,41 +159,29 @@
                                     {{--                                    <th>托盘编码</th>--}}
                                     <th>托盘位置</th>
                                     <th>物资名称</th>
-                                    <th>剩余可装数量</th>
-                                    <th>上架数量</th>
+                                    <th>可出库数量</th>
+                                    <th>出库数量</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-{{--                                @foreach($tray as $v)--}}
-{{--                                    <tr>--}}
-{{--                                        <th>--}}
-{{--                                            <input name="tray[]" id="${response[key].unique_code}" type="checkbox" value="{{$v->id}}">--}}
-{{--                                        </th>--}}
-{{--                                        --}}{{--                                        <th>{{$v->tray_code}}</th>--}}
-{{--                                        <th>{{$v->place}}</th>--}}
-{{--                                        <th>{{$v->MaterialName}}</th>--}}
-{{--                                        @if(!empty($EachWeight) && !empty($v->ResidueWeight))--}}
-{{--                                            <th>{{intval($v->ResidueWeight/$EachWeight)}}</th>--}}
-{{--                                        @else--}}
-{{--                                            <th></th>--}}
-{{--                                        @endif--}}
-{{--                                        --}}{{--                                    <td>--}}
-
-{{--                                        --}}{{--                                                                        <div class="btn-group btn-group-lg">--}}
-{{--                                        --}}{{--                                                                            <a href="{{url('warehouse/report',$warehouseReport->serial_number)}}?page={{request()->get('page',1)}}&direction={{request()->get('direction')}}&updated_at={{request()->get('updated_at')}}&category_unique_code={{request()->get('category_unique_code')}}&type={{request()->get('type')}}" class="btn btn-primary btn-flat">查看</a>--}}
-{{--                                        --}}{{--                                                                            <a href="javascript:" onclick="fnDelete({{$warehouseReport->serial_number}})" class="btn btn-danger btn-flat">删除</a>--}}
-{{--                                        --}}{{--                                                                        </div>--}}
-{{--                                        --}}{{--                                    </td>--}}
-{{--                                        <th>--}}
-{{--                                            --}}{{--                                            <div class="form-group">--}}
-{{--                                            --}}{{--                                                <label class="col-sm-3 control-label">单价：</label>--}}
-{{--                                            --}}{{--                                                <div class="col-sm-10 col-md-8">--}}
-{{--                                            <input placeholder="数量" class="form-control" type="text" name="Numbers[]" value="">--}}
-{{--                                            --}}{{--                                                </div>--}}
-{{--                                            --}}{{--                                            </div>--}}
-{{--                                        </th>--}}
-{{--                                    </tr>--}}
-{{--                                @endforeach--}}
+                                @foreach($tray as $v)
+                                    <tr>
+                                        <th>
+                                            <input name="tray[]" id="${response[key].unique_code}" type="checkbox" value="{{$v->id}}">
+                                        </th>
+                                        {{--                                        <th>{{$v->tray_code}}</th>--}}
+                                        <th>{{$v->place}}</th>
+                                        <th>{{$v->MaterialName}}</th>
+                                        @if(!empty($EachWeight) && !empty($v->ResidueWeight))
+                                            <th>{{intval($v->weight/$EachWeight)}}</th>
+                                        @else
+                                            <th></th>
+                                        @endif
+                                        <th>
+                                            <input placeholder="数量" class="form-control" type="text" name="Numbers[]" value="">
+                                        </th>
+                                    </tr>
+                                @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -342,47 +240,49 @@
         {{--        });--}}
 
         /**
-         * 添加对应物资到物资列表
+         * 添加对应物资到物资列表(出库)
          */
-        {{--fnUpdate = function () {--}}
-        {{--    $.ajax({--}}
-        {{--        url: `{{url('entire/model',$entireModel->id)}}`,--}}
-        {{--        type: "put",--}}
-        {{--        data: $("#frmUpdate").serialize(),--}}
-        {{--        success: function (response) {--}}
-        {{--            // console.log('success:', response);--}}
-        {{--            alert(response);--}}
-        {{--            location.href = "{{url('entire/model/1/edit')}}";--}}
-        {{--        },--}}
-        {{--        error: function (error) {--}}
-        {{--            // console.log('fail:', error);--}}
-        {{--            if (error.responseText == 401) location.href = "{{url('login')}}";--}}
-        {{--            alert(error.responseText);--}}
-        {{--        }--}}
-        {{--    });--}}
-        {{--};--}}
+        fnUpdate = function () {
+            $.ajax({
+                url: `{{url('category',$MaterialName)}}`,
+                type: "put",
+                data: $("#frmUpdate").serialize(),
+                success: function (response) {
+                    // console.log('success:', response);
+                    alert(response);
+                    location.href = "{{url('category')}}";
+                },
+                error: function (error) {
+                    // console.log('fail:', error);
+                    if (error.responseText == 401) location.href = "{{url('login')}}";
+                    alert(error.responseText);
+                }
+            });
+        };
+
+
 
 
         /**
-         * 将物资列表中的数据存入入库单中
+         * 将物资列表中的数据存入  出库单中
          */
-        {{--fn = function () {--}}
-        {{--    $.ajax({--}}
-        {{--        url: `{{url('entire/model',$entireModel->id)}}`,--}}
-        {{--        type: "get",--}}
-        {{--        data: {},--}}
-        {{--        success: function (response) {--}}
-        {{--            // console.log('success:', response);--}}
-        {{--            // alert(response);--}}
-        {{--            location.href = "{{url('warehouse/report')}}";--}}
-        {{--        },--}}
-        {{--        error: function (error) {--}}
-        {{--            // console.log('fail:', error);--}}
-        {{--            if (error.responseText == 401) location.href = "{{url('login')}}";--}}
-        {{--            alert(error.responseText);--}}
-        {{--        }--}}
-        {{--    });--}}
-        {{--};--}}
+        fn = function () {
+            $.ajax({
+                url: `{{url('category/create')}}`,
+                type: "get",
+                data: {},
+                success: function (response) {
+                    // console.log('success:', response);
+                    // alert(response);
+                    location.href = "{{url('factory')}}";
+                },
+                error: function (error) {
+                    // console.log('fail:', error);
+                    if (error.responseText == 401) location.href = "{{url('login')}}";
+                    alert(error.responseText);
+                }
+            });
+        };
 
         {{--var currentPartModels = {!! $partModels !!};--}}
 
@@ -468,9 +368,10 @@
          */
         fnCreateEntireModelIdCode = () => {
             $.ajax({
-                url: `{{url('maintain/post')}}`,
+                {{--url: `{{url('maintain/post')}}`,--}}
+                url: `{{url('entire/modelIdCode/create')}}`,
                 type: "get",
-                data: {
+                data: {type:"stockout"
                 },
                 async: true,
                 success: function (response) {
@@ -490,23 +391,23 @@
          * 物资列表删除对应物资
          * @param id
          */
-        {{--fnDelete = function (id) {--}}
-        {{--    $.ajax({--}}
-        {{--        url: `{{url('entire/model')}}/${id}`,--}}
-        {{--        type: "delete",--}}
-        {{--        data: {id: id},--}}
-        {{--        success: function (response) {--}}
-        {{--            // console.log('success:', response);--}}
-        {{--            // alert(response);--}}
-        {{--            location.reload();--}}
-        {{--        },--}}
-        {{--        error: function (error) {--}}
-        {{--            console.log('fail:', error);--}}
-        {{--            alert(error.responseText);--}}
-        {{--            if (error.status == 401) location.href = "{{url('login')}}";--}}
-        {{--        }--}}
-        {{--    });--}}
-        {{--};--}}
+        fnDelete = function (id) {
+            $.ajax({
+                url: `{{url('category')}}/${id}`,
+                type: "delete",
+                data: {id: id},
+                success: function (response) {
+                    // console.log('success:', response);
+                    // alert(response);
+                    location.reload();
+                },
+                error: function (error) {
+                    console.log('fail:', error);
+                    alert(error.responseText);
+                    if (error.status == 401) location.href = "{{url('login')}}";
+                }
+            });
+        };
 
     </script>
 @endsection

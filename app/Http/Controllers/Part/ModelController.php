@@ -164,6 +164,7 @@ class ModelController extends Controller
     }
 
     /**
+     * 删除物资
      * Remove the specified resource from storage.
      *
      * @param int $id

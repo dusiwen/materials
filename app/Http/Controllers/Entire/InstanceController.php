@@ -354,8 +354,6 @@ class InstanceController extends Controller
 //            $entireInstance = EntireInstance::where('identity_code', $identityCode)->firstOrFail();
 //            $nextFixingData = \App\Facades\EntireInstance::nextFixingTime($entireInstance, $request->get('fix_cycle_value'), $request->get('fix_cycle_unit'));
 //            $entireInstance->fill(array_merge($request->all(), $nextFixingData))->saveOrFail();
-            DB::table("stockout")->where("id",$id)->update(["StockOut_Status"=>"已出库",]);
-            return Response::make('出库成功');
         } catch (ModelNotFoundException $exception) {
             return Response::make('数据不存在', 404);
         } catch (\Exception $exception) {

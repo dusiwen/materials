@@ -104,7 +104,7 @@ class ModelController extends Controller
         try {
             $time =time();
             DB::table("stockintest")->update(["time"=>$time]);
-            $stockintest =stockintest::select(["StockIn_Units","StockIn_SourceOfFund","StockIn_MaterialsNumber","StockIn_StorageLocation","StockIn_time","StockIn_Consignee","StockIn_OrderNumber","StockIn_AccountingNumber","StockIn_Supplier","StockIn_ContractNumber","StockIn_MaterialCode","StockIn_MaterialName","StockIn_Batch","StockIn_Unit","StockIn_Number","StockIn_Price","StockIn_Sum","StockIn_ProjectName","StockIn_Remark","StockIn_Status","StockIn_Type","StockIn_Principal","StockIn_Custodian","StockIn_EachWeight","StockIn_Weight","time","pid","created_at","updated_at"])->get()->toArray();
+            $stockintest =stockintest::select(["StockIn_Units","StockIn_SourceOfFund","StockIn_MaterialsNumber","StockIn_StorageLocation","StockIn_time","StockIn_Consignee","StockIn_OrderNumber","StockIn_AccountingNumber","StockIn_Supplier","StockIn_ContractNumber","StockIn_MaterialCode","StockIn_MaterialName","StockIn_Batch","StockIn_Unit","StockIn_Number","StockIn_Price","StockIn_Sum","StockIn_ProjectName","WBS","StockIn_Remark","StockIn_Status","StockIn_Type","StockIn_Principal","StockIn_Custodian","StockIn_EachWeight","StockIn_Weight","time","pid","created_at","updated_at"])->get()->toArray();
             if (empty($stockintest)){
                 return Response::make('数据不存在', 404);
             }
@@ -139,8 +139,8 @@ class ModelController extends Controller
 
 
             $project = DB::table("project")->get()->toArray();  //获取所有项目名称
-            $sockin_type = DB::table("sockin_type")->get()->toArray();  //获取入库类型
-            $stockinTest = DB::table("stockintest")->orderBy('id','desc')->get()->toArray();  //获取添加的物资列表中的物资
+            $stockin_type = DB::table("stockin_type")->get()->toArray();  //获取入库类型
+            $stockintest = DB::table("stockintest")->orderBy('id','desc')->get()->toArray();  //获取添加的物资列表中的物资
             //将选择的物资存入session后,获取session值
             if (!empty($request->session()->get("MaterialsId"))){
                 $MaterialsId = $request->session()->get("MaterialsId");//若不为空则传值
@@ -178,8 +178,8 @@ class ModelController extends Controller
                 ->with('entireModel', $entireModel)
                 ->with('categories', $categories)
                 ->with('tray', $tray)
-                ->with('sockin_type', $sockin_type)
-                ->with('stockinTest', $stockinTest)
+                ->with('stockin_type', $stockin_type)
+                ->with('stockintest', $stockintest)
                 ->with('project', $project)
                 ->with('MaterialName', $MaterialName)
                 ->with('EachWeight', $EachWeight)
@@ -219,6 +219,7 @@ class ModelController extends Controller
             $EachWeight = $Materials[0]->EachWeight;//获取物资每个重量
 //            $StockIn_StorageType = $request->input("StorageType");  //获取仓储类型
             $project_name = $request->input("project_name");  //获取项目名称
+            $WBS = DB::table("project")->where("project_name",$project_name)->get(["WBS"])->toArray();//获取WBS元素
             $StockIn_Weight =$EachWeight*($request->input("StockIn_Number")); //根据每个重量计算总重量
             $StockIn_Sum = $request->input("StockIn_Number")*$request->input("StockIn_Price");  //计算物资总金额
 
@@ -270,8 +271,8 @@ class ModelController extends Controller
             $trays = array_combine($trayid,$Numbers);  //重组数组,将$trayid的值作为新数组的键名、$Numbers的值作为新数组的值
 //            return Response::make($trays,404);
             $time = time();
-            //将物资列表中的数据存入stockinTest表中(返回id)
-            $MaterialTestId = DB::table("stockintest")->insertGetId(["StockIn_Remark"=>$request->input("StockIn_Remark"),"StockIn_Type"=>$request->input("StockIn_Type"),"StockIn_MaterialCode"=>$MaterialCode,"StockIn_MaterialName"=>$MaterialName,"StockIn_Unit"=>$unit,"StockIn_Number"=>$request->input("StockIn_Number"),"StockIn_Price"=>$request->input("StockIn_Price"),"StockIn_Sum"=>$StockIn_Sum,"StockIn_Remark"=>$request->input("StockIn_Remark"),"StockIn_EachWeight"=>$EachWeight,"StockIn_Weight"=>$StockIn_Weight,"StockIn_ProjectName"=>$project_name,"time"=>$time,"StockIn_Status"=>"扫码确认"]); //添加数据到入库单中
+            //将物资列表中的数据存入stockintest表中(返回id)
+            $MaterialTestId = DB::table("stockintest")->insertGetId(["StockIn_Type"=>$request->input("StockIn_Type"),"StockIn_MaterialCode"=>$MaterialCode,"StockIn_MaterialName"=>$MaterialName,"StockIn_Unit"=>$unit,"StockIn_Number"=>$request->input("StockIn_Number"),"StockIn_Price"=>$request->input("StockIn_Price"),"StockIn_Sum"=>$StockIn_Sum,"StockIn_Remark"=>$request->input("StockIn_Remark"),"StockIn_EachWeight"=>$EachWeight,"StockIn_Weight"=>$StockIn_Weight,"StockIn_ProjectName"=>$project_name,"WBS"=>$WBS[0]->WBS,"time"=>$time,"StockIn_Status"=>"扫码确认"]); //添加数据到入库单中
             DB::table("stockintest")->where("id",$MaterialTestId)->update(["pid"=>$MaterialTestId]);//添加pid=id
             //选择对应的托盘,给予物资编码,物料凭证号,物资名称,剩余重量(可能多选)
             foreach ($trays as $k=>$v){
@@ -306,7 +307,7 @@ class ModelController extends Controller
         try {
             $Materials= DB::table('stockintest')->where('id',$id)->get()->toArray();//获取所选物资信息
             $StockIn_EachWeight = $Materials[0]->StockIn_EachWeight;//获取物资每个重量
-            $stockinnum = DB::table("stockinnum")->where("MaterialTestId",$id)->select("TrayId","MaterialNum")->get()->toArray();
+            $stockinnum = DB::table("stockinnum")->where("MaterialTestId",$id)->select("TrayId","MaterialNum")->get()->toArray();//获取该物资对应的托盘id及该托盘对应的物资数量
             $i = 0;
             foreach ($stockinnum as $k=>$v){
                 $TrayId = $stockinnum[$i]->TrayId;
@@ -323,13 +324,14 @@ class ModelController extends Controller
                 DB::table("tray")->where("id",$k)->update(["weight"=>($weight[0]->weight-$StockIn_EachWeight*$v),"ResidueWeight"=>($ResidueWeight[0]->ResidueWeight+$StockIn_EachWeight*$v)]); //选择对应的托盘,改变重量,剩余重量
                 //如果weight=0 则认为是空托盘,项目名称,物资编码,物资名称设为空
                 $w = DB::table("tray")->where("id",$k)->select("weight")->get()->toArray();//再次获取所选托盘的重量
+                $max = DB::table("tray")->where("id",$k)->select("max")->get()->toArray();//获取所选托盘的剩余重量
                 if ($w[0]->weight == 0){
-                    DB::table("tray")->where("id",$k)->update(["ProjectName"=>NULL,"MaterialCode"=>NULL,"MaterialName"=>NULL,"weight"=>NULL]);
+                    DB::table("tray")->where("id",$k)->update(["ProjectName"=>NULL,"MaterialCode"=>NULL,"MaterialName"=>NULL,"weight"=>NULL,"ResidueWeight"=>$max[0]->max,"times"=>NULL]);
                 }
             }
             //删除stockinnum表中物资对应的条数
             DB::table("stockinnum")->where("MaterialTestId",$id)->delete();
-            //删除stockinTest表中对应的物资
+            //删除stockintest表中对应的物资
             DB::table("stockintest")->where("id",$id)->delete();
             return Response::make('删除成功');
         } catch (ModelNotFoundException $exception) {

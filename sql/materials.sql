@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2019-08-07 17:29:07
+Date: 2019-08-23 18:02:00
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -182,7 +182,7 @@ CREATE TABLE `entire_instances` (
 -- ----------------------------
 -- Records of entire_instances
 -- ----------------------------
-INSERT INTO `entire_instances` VALUES ('1', '2019-05-27 09:45:47', '2019-07-29 11:18:09', null, 'Q010101', null, null, 'FIXING', null, null, '1', '西安铁路信号设备有限责任公司', 'e1', 'Q01Q010101B04900000001', null, '0', 'Q01', null, 'B04920190527094547_03_1558921547', null, '1', null, null, null, null, null, 'YEAR', '0', '0', '0', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `entire_instances` VALUES ('1', '2019-05-27 09:45:47', '2019-08-19 15:37:45', null, 'Q010101', null, null, 'FIXING', null, null, '1', '西安铁路信号设备有限责任公司', 'e1', 'Q01Q010101B04900000001', null, '0', 'Q01', null, 'B04920190527094547_03_1558921547', null, '1', null, null, null, null, null, 'YEAR', '0', '0', '0', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
 
 -- ----------------------------
 -- Table structure for entire_instance_change_part_logs
@@ -17260,16 +17260,15 @@ CREATE TABLE `materials` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=41 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=51 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of materials
 -- ----------------------------
-INSERT INTO `materials` VALUES ('36', '500064907', '光缆金具,OPGW,防震金具', '付', '28', '1.2', '1', '1565072310', '10', null, null);
-INSERT INTO `materials` VALUES ('37', '500041249', '光缆余缆架', '付', '38', '1.5', '2', '1565072442', '5', null, null);
-INSERT INTO `materials` VALUES ('38', '500074958', '铁塔,AC110kv,单回路,角钢,Q345,直线塔', '吨', '50', '1000', '3', '1565072607', '15', null, null);
-INSERT INTO `materials` VALUES ('39', '500024970', '钢芯铝绞线,JL/G1A,300/50', '吨', '6', '1500', '4', '1565072976', '20', null, null);
-INSERT INTO `materials` VALUES ('40', '500063946', '光缆接头盒,OPGW光缆用,24', '只', '22', '5', '5', '1565073044', '6', null, null);
+INSERT INTO `materials` VALUES ('47', '500079042', '光缆金具,OPGW,防震金具', '付', '1', '10.2', '1', '1566526430', '10', null, null);
+INSERT INTO `materials` VALUES ('48', '500014043', '光缆余缆架', '付', '1', '5', '2', '1566526464', '10', null, null);
+INSERT INTO `materials` VALUES ('49', '500045042', '光缆接头盒,OPGW光缆用,24', '只', '1', '20', '3', '1566526518', '5', null, null);
+INSERT INTO `materials` VALUES ('50', '500052611', '钢芯铝绞线,JL/GIA,300/40', '吨', '6', '1000', '4', '1566526594', '15', null, null);
 
 -- ----------------------------
 -- Table structure for measurements
@@ -18611,53 +18610,6 @@ CREATE TABLE `rbac_roles` (
 INSERT INTO `rbac_roles` VALUES ('1', '2019-03-06 15:11:29', '2019-03-06 15:11:29', null, '超级管理员');
 
 -- ----------------------------
--- Table structure for sockin_type
--- ----------------------------
-DROP TABLE IF EXISTS `sockin_type`;
-CREATE TABLE `sockin_type` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '入库类型id,不同类型对应不同出库时间',
-  `sockin_type` varchar(15) DEFAULT NULL COMMENT '入库类型',
-  `Type` varchar(5) DEFAULT NULL COMMENT '仓储类型',
-  `tiem` varchar(2) DEFAULT NULL COMMENT '到期时间(年)',
-  `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of sockin_type
--- ----------------------------
-INSERT INTO `sockin_type` VALUES ('1', '采购物资入库', null, '10', null, null);
-INSERT INTO `sockin_type` VALUES ('2', '调拨物资入库', null, '5', null, null);
-INSERT INTO `sockin_type` VALUES ('3', '工程结余物资退库', null, '4', null, null);
-INSERT INTO `sockin_type` VALUES ('4', '退出退役资产保管入库', null, '5', null, null);
-INSERT INTO `sockin_type` VALUES ('5', '其他单位委托代保管物资入库', null, '5', null, null);
-INSERT INTO `sockin_type` VALUES ('6', '废旧物资入库', null, '5', null, null);
-INSERT INTO `sockin_type` VALUES ('7', '供应商寄存物资入库', null, '5', null, null);
-
--- ----------------------------
--- Table structure for sockout_materials
--- ----------------------------
-DROP TABLE IF EXISTS `sockout_materials`;
-CREATE TABLE `sockout_materials` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '出库物资表id',
-  `batch` varchar(20) DEFAULT NULL COMMENT '批次',
-  `unit` varchar(5) DEFAULT NULL COMMENT '单位',
-  `number` float(11,3) DEFAULT NULL COMMENT '数量',
-  `price` float(11,2) DEFAULT NULL COMMENT '单价（元）',
-  `sum` float(11,2) DEFAULT NULL COMMENT '金额（元）',
-  `remark` varchar(100) DEFAULT NULL COMMENT '备注',
-  `pid` int(11) DEFAULT NULL COMMENT '对应出库单（sockout）id',
-  `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of sockout_materials
--- ----------------------------
-
--- ----------------------------
 -- Table structure for statuses
 -- ----------------------------
 DROP TABLE IF EXISTS `statuses`;
@@ -18686,7 +18638,8 @@ CREATE TABLE `stockin` (
   `StockIn_SourceOfFund` varchar(50) DEFAULT NULL COMMENT '资金来源',
   `StockIn_MaterialsNumber` varchar(20) DEFAULT NULL COMMENT '物料凭证号',
   `StockIn_StorageLocation` varchar(50) DEFAULT NULL COMMENT '库存地点',
-  `StockIn_time` varchar(10) DEFAULT NULL COMMENT '入库日期：年-月',
+  `StockIn_times` varchar(20) DEFAULT NULL COMMENT '入库日期：年-月-日',
+  `StockIn_time` varchar(10) DEFAULT NULL COMMENT '入库日期:时间戳',
   `StockIn_Consignee` varchar(50) DEFAULT NULL COMMENT '收货方',
   `StockIn_OrderNumber` varchar(20) DEFAULT NULL COMMENT '采购订单号',
   `StockIn_AccountingNumber` varchar(20) DEFAULT NULL COMMENT '会计凭证号',
@@ -18700,6 +18653,7 @@ CREATE TABLE `stockin` (
   `StockIn_Price` varchar(11) DEFAULT NULL COMMENT '单价(元)',
   `StockIn_Sum` varchar(11) DEFAULT NULL COMMENT '金额(元)',
   `StockIn_ProjectName` varchar(50) DEFAULT NULL COMMENT '项目名称',
+  `WBS` varchar(30) DEFAULT NULL COMMENT 'WBS元素',
   `StockIn_Remark` varchar(100) DEFAULT NULL COMMENT '备注',
   `StockIn_Status` varchar(10) DEFAULT NULL COMMENT '入库状态',
   `StockIn_Type` varchar(20) DEFAULT NULL COMMENT '入库类型',
@@ -18712,29 +18666,28 @@ CREATE TABLE `stockin` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=263 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=315 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of stockin
 -- ----------------------------
-INSERT INTO `stockin` VALUES ('261', null, null, null, null, null, null, null, null, null, null, '500064907', '光缆金具,OPGW,防震金具', null, '付', '3', '5', '15', '国网宁夏固原供电公司1', '1', '未入库', '采购物资入库', null, null, '1.2', '3.6', '1565076349', '267', null, null);
-INSERT INTO `stockin` VALUES ('262', null, null, null, null, null, null, null, null, null, null, '500041249', '光缆余缆架', null, '付', '5', '120.5', '602.5', '国网宁夏固原供电公司1', '1', '未入库', '采购物资入库', null, null, '1.5', '7.5', '1565076349', '268', null, null);
-INSERT INTO `stockin` VALUES ('259', null, null, null, null, null, null, null, null, null, null, '500050068', '电容式电压互感器,AC110kV,油浸,μF,4,0.5', null, '台', '5', '1', '5', '国网宁夏固原供电公司1', null, '已入库', '采购物资入库', null, null, '20', '100', '1564455174', '261', null, null);
-INSERT INTO `stockin` VALUES ('260', null, null, null, null, null, null, null, null, null, null, '500082632', '针式瓷绝缘子,P-0T,105,195', null, '只', '1', '1', '1', '国网宁夏固原供电公司1', null, '已入库', '采购物资入库', null, null, '10', '10', '1564455174', '262', null, null);
-INSERT INTO `stockin` VALUES ('258', null, null, null, null, null, null, null, null, null, null, '500082632', '针式瓷绝缘子,P-0T,105,195', null, '只', '3', '1', '3', '国网宁夏固原供电公司1', '1', '扫码确认', '采购物资入库', null, null, '10', '30', '1564455116', '260', null, null);
+INSERT INTO `stockin` VALUES ('312', null, null, null, null, '2019-08-23', '1566528050', null, null, null, null, null, '500014043', '光缆余缆架', '0000000001', '付', '1', '1', '1', '国网宁夏固原供电公司1', '1829GY1500HQ00A2150001', '1', '已入库', '采购物资入库', null, null, '5', '5', '1566527758', '332', null, null);
+INSERT INTO `stockin` VALUES ('313', null, null, null, null, '2019-08-23', '1566528050', null, null, null, null, null, '500045042', '光缆接头盒,OPGW光缆用,24', '0000000001', '只', '1', '1', '1', '国网宁夏固原供电公司1', '1829GY1500HQ00A2150001', '1', '已入库', '采购物资入库', null, null, '20', '20', '1566527758', '333', null, null);
+INSERT INTO `stockin` VALUES ('311', null, null, null, null, '2019-08-23', '1566528050', null, null, null, null, null, '500079042', '光缆金具,OPGW,防震金具', '0000000001', '付', '3', '1', '3', '国网宁夏固原供电公司1', '1829GY1500HQ00A2150001', '1', '已入库', '采购物资入库', null, null, '10.2', '30.6', '1566527758', '331', null, null);
+INSERT INTO `stockin` VALUES ('314', null, null, null, null, '2019-08-23', '1566528050', null, null, null, null, null, '500052611', '钢芯铝绞线,JL/GIA,300/40', '0000000001', '吨', '6', '1', '6', '国网宁夏固原供电公司1', '1829GY1500HQ00A2150001', '1', '已入库', '采购物资入库', null, null, '1000', '6000', '1566527758', '334', null, null);
 
 -- ----------------------------
 -- Table structure for stockincensus
 -- ----------------------------
 DROP TABLE IF EXISTS `stockincensus`;
 CREATE TABLE `stockincensus` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '出入库统计表id',
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '入库统计表id',
   `sum` varchar(10) DEFAULT NULL COMMENT '入库数量',
   `time` varchar(20) DEFAULT NULL COMMENT '入库时间年-月-日',
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=46 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=53 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of stockincensus
@@ -18743,107 +18696,39 @@ INSERT INTO `stockincensus` VALUES ('42', '2', '2019-08-03', null, null);
 INSERT INTO `stockincensus` VALUES ('43', '5', '2019-08-04', null, null);
 INSERT INTO `stockincensus` VALUES ('44', '10', '2019-08-05', null, null);
 INSERT INTO `stockincensus` VALUES ('45', '1', '2019-08-06', null, null);
+INSERT INTO `stockincensus` VALUES ('46', '1', '2019-08-14', null, null);
+INSERT INTO `stockincensus` VALUES ('47', '15', '2019-08-15', null, null);
+INSERT INTO `stockincensus` VALUES ('48', '1', '2019-08-19', null, null);
+INSERT INTO `stockincensus` VALUES ('49', '6', '2019-08-20', null, null);
+INSERT INTO `stockincensus` VALUES ('50', '2', '2019-08-21', null, null);
+INSERT INTO `stockincensus` VALUES ('51', '6', '2019-08-22', null, null);
+INSERT INTO `stockincensus` VALUES ('52', '1', '2019-08-23', null, null);
 
 -- ----------------------------
 -- Table structure for stockinnum
 -- ----------------------------
 DROP TABLE IF EXISTS `stockinnum`;
 CREATE TABLE `stockinnum` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '物资上架数量id',
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '物资上架数量id(入库)',
   `TrayId` varchar(11) DEFAULT NULL COMMENT '托盘id',
-  `MaterialNum` varchar(11) DEFAULT NULL COMMENT '该托盘对应的上架数量',
-  `MaterialTestId` varchar(11) DEFAULT NULL COMMENT '该托盘对应的MaterialTest表id',
-  `time` varchar(20) DEFAULT NULL COMMENT '添加MaterialTest表的时间(方便删除)',
+  `MaterialNum` varchar(11) DEFAULT NULL COMMENT '该托盘id对应的上架数量',
+  `MaterialTestId` varchar(11) DEFAULT NULL COMMENT '该托盘对应的stockintest表id(物资列表id)',
+  `time` varchar(20) DEFAULT NULL COMMENT '添加stockintest表的时间(方便删除)',
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=89 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=201 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of stockinnum
 -- ----------------------------
-INSERT INTO `stockinnum` VALUES ('43', '33', '2', '243', '1564133701', null, null);
-INSERT INTO `stockinnum` VALUES ('42', '1', '1', '243', '1564133701', null, null);
-INSERT INTO `stockinnum` VALUES ('41', '33', '11', '318', '1564132458', null, null);
-INSERT INTO `stockinnum` VALUES ('40', '1', '1', '318', '1564132458', null, null);
-INSERT INTO `stockinnum` VALUES ('44', '34', '1', '244', '1564134195', null, null);
-INSERT INTO `stockinnum` VALUES ('45', '43', '2', '244', '1564134195', null, null);
-INSERT INTO `stockinnum` VALUES ('46', '35', '1', '245', '1564134287', null, null);
-INSERT INTO `stockinnum` VALUES ('47', '36', '4', '245', '1564134287', null, null);
-INSERT INTO `stockinnum` VALUES ('48', '33', '1', '246', '1564367024', null, null);
-INSERT INTO `stockinnum` VALUES ('49', '34', '2', '246', '1564367024', null, null);
-INSERT INTO `stockinnum` VALUES ('50', '1', '2', '247', '1564367077', null, null);
-INSERT INTO `stockinnum` VALUES ('51', '43', '3', '247', '1564367077', null, null);
-INSERT INTO `stockinnum` VALUES ('52', '35', '1', '248', '1564367116', null, null);
-INSERT INTO `stockinnum` VALUES ('53', '36', '4', '248', '1564367116', null, null);
-INSERT INTO `stockinnum` VALUES ('54', '37', '5', '248', '1564367116', null, null);
-INSERT INTO `stockinnum` VALUES ('58', '39', '4', '250', '1564368629', null, null);
-INSERT INTO `stockinnum` VALUES ('57', '38', '1', '250', '1564368629', null, null);
-INSERT INTO `stockinnum` VALUES ('59', '1', '1', '251', '1564369443', null, null);
-INSERT INTO `stockinnum` VALUES ('60', '33', '1', '252', '1564370963', null, null);
-INSERT INTO `stockinnum` VALUES ('61', '34', '1', '252', '1564370963', null, null);
-INSERT INTO `stockinnum` VALUES ('62', '43', '1', '253', '1564370989', null, null);
-INSERT INTO `stockinnum` VALUES ('63', '35', '1', '253', '1564370989', null, null);
-INSERT INTO `stockinnum` VALUES ('64', '36', '1', '254', '1564371449', null, null);
-INSERT INTO `stockinnum` VALUES ('65', '37', '1', '255', '1564371464', null, null);
-INSERT INTO `stockinnum` VALUES ('66', '1', '1', '256', '1564372117', null, null);
-INSERT INTO `stockinnum` VALUES ('67', '33', '2', '256', '1564372117', null, null);
-INSERT INTO `stockinnum` VALUES ('68', '34', '2', '257', '1564372224', null, null);
-INSERT INTO `stockinnum` VALUES ('69', '43', '3', '257', '1564372224', null, null);
-INSERT INTO `stockinnum` VALUES ('70', '35', '1', '258', '1564372458', null, null);
-INSERT INTO `stockinnum` VALUES ('71', '36', '2', '258', '1564372458', null, null);
-INSERT INTO `stockinnum` VALUES ('72', '37', '3', '258', '1564372458', null, null);
-INSERT INTO `stockinnum` VALUES ('74', '1', '1', '260', '1564455108', null, null);
-INSERT INTO `stockinnum` VALUES ('75', '33', '2', '260', '1564455108', null, null);
-INSERT INTO `stockinnum` VALUES ('76', '34', '2', '261', '1564455146', null, null);
-INSERT INTO `stockinnum` VALUES ('77', '43', '3', '261', '1564455146', null, null);
-INSERT INTO `stockinnum` VALUES ('78', '1', '1', '262', '1564455171', null, null);
-INSERT INTO `stockinnum` VALUES ('86', '33', '2', '267', '1565076303', null, null);
-INSERT INTO `stockinnum` VALUES ('85', '1', '1', '267', '1565076303', null, null);
-INSERT INTO `stockinnum` VALUES ('87', '34', '4', '268', '1565076331', null, null);
-INSERT INTO `stockinnum` VALUES ('88', '43', '1', '268', '1565076331', null, null);
-
--- ----------------------------
--- Table structure for stockins
--- ----------------------------
-DROP TABLE IF EXISTS `stockins`;
-CREATE TABLE `stockins` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '入库单id',
-  `StockIn_Units` varchar(50) DEFAULT NULL COMMENT '单位',
-  `StockIn_SourceOfFund` varchar(50) DEFAULT NULL COMMENT '资金来源',
-  `StockIn_MaterialsNumber` varchar(20) DEFAULT NULL COMMENT '物料凭证号',
-  `StockIn_StorageLocation` varchar(50) DEFAULT NULL COMMENT '库存地点',
-  `StockIn_time` varchar(10) DEFAULT NULL COMMENT '入库日期：年-月',
-  `StockIn_Consignee` varchar(50) DEFAULT NULL COMMENT '收货方',
-  `StockIn_OrderNumber` varchar(20) DEFAULT NULL COMMENT '采购订单号',
-  `StockIn_AccountingNumber` varchar(20) DEFAULT NULL COMMENT '会计凭证号',
-  `StockIn_Supplier` varchar(50) DEFAULT NULL COMMENT '供货单位',
-  `StockIn_ContractNumber` varchar(20) DEFAULT NULL COMMENT '合同编号',
-  `StockIn_MaterialCode` varchar(20) DEFAULT NULL COMMENT '物资编码',
-  `StockIn_MaterialName` varchar(50) DEFAULT NULL COMMENT '物资名称',
-  `StockIn_Batch` varchar(20) DEFAULT NULL COMMENT '入库批次',
-  `StockIn_Unit` varchar(5) DEFAULT NULL COMMENT '单位',
-  `StockIn_Number` varchar(11) DEFAULT NULL COMMENT '数量',
-  `StockIn_Price` varchar(11) DEFAULT NULL COMMENT '单价(元)',
-  `StockIn_Sum` varchar(11) DEFAULT NULL COMMENT '金额(元)',
-  `StockIn_ProjectName` varchar(50) DEFAULT NULL COMMENT '项目名称',
-  `StockIn_Remark` varchar(100) DEFAULT NULL COMMENT '备注',
-  `StockIn_Status` varchar(10) DEFAULT NULL COMMENT '入库状态',
-  `StockIn_Type` varchar(20) DEFAULT NULL COMMENT '入库类型',
-  `StockIn_Principal` varchar(10) DEFAULT NULL COMMENT '负责人',
-  `StockIn_Custodian` varchar(10) DEFAULT NULL COMMENT '保管人',
-  `StockIn_EachWeight` varchar(10) DEFAULT NULL COMMENT '每个重量',
-  `StockIn_Weight` varchar(10) DEFAULT NULL COMMENT '总重量',
-  `time` varchar(20) DEFAULT NULL COMMENT '与stockintest表的id关联',
-  `pid` varchar(11) DEFAULT NULL COMMENT '与stockintest表的id关联',
-  `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=258 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of stockins
--- ----------------------------
+INSERT INTO `stockinnum` VALUES ('194', '1', '1', '331', '1566527628', null, null);
+INSERT INTO `stockinnum` VALUES ('195', '33', '2', '331', '1566527628', null, null);
+INSERT INTO `stockinnum` VALUES ('196', '34', '1', '332', '1566527649', null, null);
+INSERT INTO `stockinnum` VALUES ('197', '43', '1', '333', '1566527689', null, null);
+INSERT INTO `stockinnum` VALUES ('198', '35', '1', '334', '1566527724', null, null);
+INSERT INTO `stockinnum` VALUES ('199', '36', '2', '334', '1566527724', null, null);
+INSERT INTO `stockinnum` VALUES ('200', '37', '3', '334', '1566527724', null, null);
 
 -- ----------------------------
 -- Table structure for stockintest
@@ -18869,6 +18754,7 @@ CREATE TABLE `stockintest` (
   `StockIn_Price` varchar(11) DEFAULT NULL COMMENT '单价(元)',
   `StockIn_Sum` varchar(11) DEFAULT NULL COMMENT '金额(元)',
   `StockIn_ProjectName` varchar(50) DEFAULT NULL COMMENT '项目名称',
+  `WBS` varchar(30) DEFAULT NULL COMMENT 'WBS元素',
   `StockIn_Remark` varchar(100) DEFAULT NULL COMMENT '备注',
   `StockIn_Status` varchar(10) DEFAULT NULL COMMENT '入库状态',
   `StockIn_Type` varchar(20) DEFAULT NULL COMMENT '入库类型',
@@ -18881,17 +18767,134 @@ CREATE TABLE `stockintest` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=269 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=335 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of stockintest
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for stockin_type
+-- ----------------------------
+DROP TABLE IF EXISTS `stockin_type`;
+CREATE TABLE `stockin_type` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '入库类型id,不同类型对应不同出库时间',
+  `stockin_type` varchar(15) DEFAULT NULL COMMENT '入库类型',
+  `Type` varchar(5) DEFAULT NULL COMMENT '仓储类型',
+  `tiem` varchar(2) DEFAULT NULL COMMENT '到期时间(年)',
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of stockin_type
+-- ----------------------------
+INSERT INTO `stockin_type` VALUES ('1', '采购物资入库', null, '10', null, null);
+INSERT INTO `stockin_type` VALUES ('2', '调拨物资入库', null, '5', null, null);
+INSERT INTO `stockin_type` VALUES ('3', '工程结余物资退库', null, '4', null, null);
+INSERT INTO `stockin_type` VALUES ('4', '退出退役资产保管入库', null, '5', null, null);
+INSERT INTO `stockin_type` VALUES ('5', '其他单位委托代保管物资入库', null, '5', null, null);
+INSERT INTO `stockin_type` VALUES ('6', '废旧物资入库', null, '5', null, null);
+INSERT INTO `stockin_type` VALUES ('7', '供应商寄存物资入库', null, '5', null, null);
+INSERT INTO `stockin_type` VALUES ('8', '借用物资归还', null, '5', null, null);
+
+-- ----------------------------
 -- Table structure for stockout
 -- ----------------------------
 DROP TABLE IF EXISTS `stockout`;
 CREATE TABLE `stockout` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '出库单id',
+  `StockOut_Units` varchar(50) DEFAULT NULL COMMENT '单位',
+  `StockOut_StorageLocation` varchar(50) DEFAULT NULL COMMENT '库存地点',
+  `StockOut_OrderNumber` varchar(20) DEFAULT NULL COMMENT '采购订单号',
+  `StockOut_ProjectName` varchar(50) DEFAULT NULL COMMENT '项目名称',
+  `StockOut_ContractNumber` varchar(20) DEFAULT NULL COMMENT '合同编号',
+  `StockOut_RecipientsUnit` varchar(50) DEFAULT NULL COMMENT '领用单位',
+  `StockOut_AccountingNumber` varchar(20) DEFAULT NULL COMMENT '会计凭证号',
+  `StockOut_MaterialsNumber` varchar(20) DEFAULT NULL COMMENT '物料凭证号',
+  `StockOut_Times` varchar(20) DEFAULT NULL COMMENT '出库日期：年-月-日',
+  `StockOut_Time` varchar(10) DEFAULT NULL COMMENT '出库日期:时间戳',
+  `StockOut_ReservedNumber` varchar(20) DEFAULT NULL COMMENT '预留号',
+  `StockOut_MaterialCode` varchar(20) DEFAULT NULL COMMENT '物资编码',
+  `StockOut_MaterialName` varchar(50) DEFAULT NULL COMMENT '物资名称',
+  `StockOut_Batch` varchar(20) DEFAULT NULL COMMENT '出库批次',
+  `StockOut_Number` varchar(11) DEFAULT NULL COMMENT '出库数量',
+  `StockOut_Price` float(11,3) DEFAULT NULL COMMENT '出库单价(元)',
+  `StockOut_Sum` varchar(11) DEFAULT NULL COMMENT '出库金额(元)',
+  `StockOut_Unit` varchar(5) DEFAULT NULL COMMENT '单位',
+  `StockOut_Remark` varchar(100) DEFAULT NULL COMMENT '出库备注',
+  `StockOut_Principal` varchar(10) DEFAULT NULL COMMENT '负责人',
+  `StockOut_Custodian` varchar(10) DEFAULT NULL COMMENT '保管人',
+  `StockOut_Picking` varchar(10) DEFAULT NULL COMMENT '领料人',
+  `StockOut_Status` varchar(10) DEFAULT NULL COMMENT '出库状态',
+  `StockOut_Type` varchar(20) DEFAULT NULL COMMENT '出库类型',
+  `StockOut_EachWeight` varchar(10) DEFAULT NULL COMMENT '每个重量',
+  `StockOut_Weight` varchar(10) DEFAULT NULL COMMENT '出库总重量',
+  `time` varchar(20) DEFAULT NULL COMMENT '与stockouttest表的id关联',
+  `pid` varchar(11) DEFAULT NULL COMMENT '与stockouttest表的id关联',
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of stockout
+-- ----------------------------
+INSERT INTO `stockout` VALUES ('26', null, null, null, '国网宁夏固原供电公司1', null, null, null, null, '2019-08-23', '1566553177', null, '500079042', '光缆金具,OPGW,防震金具', '0000000001', '1', '1.000', '1', '付', '1', null, null, null, '已出库', '物资领用出库', '10.2', '10.2', '1566528024', '24', null, null);
+INSERT INTO `stockout` VALUES ('27', null, null, null, '国网宁夏固原供电公司1', null, null, null, null, '2019-08-23', '1566553177', null, '500079042', '光缆金具,OPGW,防震金具', '0000000001', '1', '1.000', '1', '付', '1', null, null, null, '已出库', '物资领用出库', '10.2', '10.2', '1566528024', '25', null, null);
+INSERT INTO `stockout` VALUES ('28', null, null, null, '国网宁夏固原供电公司1', null, null, null, null, null, null, null, '500079042', '光缆金具,OPGW,防震金具', null, '1', '1.000', '1', '付', '2', null, null, null, '扫码确认', '物资领用出库', '10.2', '10.2', '1566528206', '26', null, null);
+INSERT INTO `stockout` VALUES ('29', null, null, null, '国网宁夏固原供电公司1', null, null, null, null, null, null, null, '500045042', '光缆接头盒,OPGW光缆用,24', null, '1', '1.000', '1', '只', '2', null, null, null, '扫码确认', '物资领用出库', '20', '20', '1566529032', '27', null, null);
+
+-- ----------------------------
+-- Table structure for stockoutcensus
+-- ----------------------------
+DROP TABLE IF EXISTS `stockoutcensus`;
+CREATE TABLE `stockoutcensus` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '出库统计表id',
+  `sum` varchar(10) DEFAULT NULL COMMENT '入库数量',
+  `time` varchar(20) DEFAULT NULL COMMENT '入库时间年-月-日',
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=46 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of stockoutcensus
+-- ----------------------------
+INSERT INTO `stockoutcensus` VALUES ('42', '2', '2019-08-03', null, null);
+INSERT INTO `stockoutcensus` VALUES ('43', '3', '2019-08-04', null, null);
+INSERT INTO `stockoutcensus` VALUES ('44', '6', '2019-08-05', null, null);
+INSERT INTO `stockoutcensus` VALUES ('45', '1', '2019-08-23', null, null);
+
+-- ----------------------------
+-- Table structure for stockoutnum
+-- ----------------------------
+DROP TABLE IF EXISTS `stockoutnum`;
+CREATE TABLE `stockoutnum` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '物资下架数量id(出库)',
+  `TrayId` varchar(11) DEFAULT NULL COMMENT '托盘id',
+  `MaterialNum` varchar(11) DEFAULT NULL COMMENT '该托盘id对应的下架数量',
+  `MaterialTestId` varchar(11) DEFAULT NULL COMMENT '该托盘对应的stockouttest表id(物资列表id)',
+  `time` varchar(20) DEFAULT NULL COMMENT '添加stockouttest表的时间(方便删除)',
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=187 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of stockoutnum
+-- ----------------------------
+INSERT INTO `stockoutnum` VALUES ('183', '1', '1', '24', '1566527831', null, null);
+INSERT INTO `stockoutnum` VALUES ('184', '33', '1', '25', '1566527966', null, null);
+INSERT INTO `stockoutnum` VALUES ('185', '33', '1', '26', '1566528142', null, null);
+INSERT INTO `stockoutnum` VALUES ('186', '43', '1', '27', '1566529030', null, null);
+
+-- ----------------------------
+-- Table structure for stockouttest
+-- ----------------------------
+DROP TABLE IF EXISTS `stockouttest`;
+CREATE TABLE `stockouttest` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '出库单id',
   `StockOut_Units` varchar(50) DEFAULT NULL COMMENT '单位',
   `StockOut_StorageLocation` varchar(50) DEFAULT NULL COMMENT '库存地点',
@@ -18916,36 +18919,42 @@ CREATE TABLE `stockout` (
   `StockOut_Picking` varchar(10) DEFAULT NULL COMMENT '领料人',
   `StockOut_Status` varchar(10) DEFAULT NULL COMMENT '出库状态',
   `StockOut_Type` varchar(20) DEFAULT NULL COMMENT '出库类型',
-  `StockOut_Weight` varchar(10) DEFAULT NULL COMMENT '出库重量',
+  `StockOut_EachWeight` varchar(10) DEFAULT NULL COMMENT '每个重量',
+  `StockOut_Weight` varchar(10) DEFAULT NULL COMMENT '出库总重量',
+  `time` varchar(20) DEFAULT NULL COMMENT '与stockouttest表的id关联',
+  `pid` varchar(11) DEFAULT NULL COMMENT '与stockouttest表的id关联',
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of stockout
+-- Records of stockouttest
 -- ----------------------------
-INSERT INTO `stockout` VALUES ('1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '500082631', '农夫山泉饮用水', '0000872591', '24', '2.000', '24', '瓶', '水', '1', '1', '1', '已出库', '物资领用出库', '1', null, null);
 
 -- ----------------------------
--- Table structure for stockoutcensus
+-- Table structure for stockout_type
 -- ----------------------------
-DROP TABLE IF EXISTS `stockoutcensus`;
-CREATE TABLE `stockoutcensus` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '出入库统计表id',
-  `sum` varchar(10) DEFAULT NULL COMMENT '入库数量',
-  `time` varchar(20) DEFAULT NULL COMMENT '入库时间年-月-日',
+DROP TABLE IF EXISTS `stockout_type`;
+CREATE TABLE `stockout_type` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '入库类型id,不同类型对应不同出库时间',
+  `stockout_type` varchar(15) DEFAULT NULL COMMENT '入库类型',
+  `Type` varchar(5) DEFAULT NULL COMMENT '仓储类型',
+  `tiem` varchar(2) DEFAULT NULL COMMENT '到期时间(年)',
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=45 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of stockoutcensus
+-- Records of stockout_type
 -- ----------------------------
-INSERT INTO `stockoutcensus` VALUES ('42', '2', '2019-08-03', null, null);
-INSERT INTO `stockoutcensus` VALUES ('43', '3', '2019-08-04', null, null);
-INSERT INTO `stockoutcensus` VALUES ('44', '6', '2019-08-05', null, null);
+INSERT INTO `stockout_type` VALUES ('1', '物资领用出库', null, '10', null, null);
+INSERT INTO `stockout_type` VALUES ('2', '物资调拨出库', null, '5', null, null);
+INSERT INTO `stockout_type` VALUES ('3', '代保管物资出库', null, '4', null, null);
+INSERT INTO `stockout_type` VALUES ('4', '废旧物资出库', null, '5', null, null);
+INSERT INTO `stockout_type` VALUES ('5', '借用物资出库', null, '5', null, null);
+INSERT INTO `stockout_type` VALUES ('8', '工程结余物资退库', null, '5', null, null);
 
 -- ----------------------------
 -- Table structure for test_logs
@@ -18990,15 +18999,15 @@ CREATE TABLE `tray` (
 -- ----------------------------
 -- Records of tray
 -- ----------------------------
-INSERT INTO `tray` VALUES ('1', '3030303030303030303030303030303030', '1', 'F01', '0', '2000', '国网宁夏固原供电公司1', '500064907', '光缆金具,OPGW,防震金具', '20', '1.2', '1928.8', null, '1565076303', null, null);
-INSERT INTO `tray` VALUES ('33', '3030303030303030303030303030303031', '1', 'F02', '0', '2000', '国网宁夏固原供电公司1', '500064907', '光缆金具,OPGW,防震金具', '20', '2.4', '1917.6', null, '1565076303', null, null);
-INSERT INTO `tray` VALUES ('34', '3030303030303030303030303030303032', '1', 'F03', '0', '2000', '国网宁夏固原供电公司1', '500041249', '光缆余缆架', '20', '6', '1854', null, '1565076331', null, null);
-INSERT INTO `tray` VALUES ('43', '3030303030303030303030303030303039', '1', 'F10', '0', '2000', '国网宁夏固原供电公司1', '500041249', '光缆余缆架', '20', '1.5', '1838.5', null, '1565076331', null, null);
-INSERT INTO `tray` VALUES ('35', '3030303030303030303030303030303033', '1', 'F04', '0', '2000', null, null, null, '20', null, '800', null, null, null, null);
-INSERT INTO `tray` VALUES ('36', '3030303030303030303030303030303034', '1', 'F05', '0', '2000', null, null, null, '20', null, '1860', null, null, null, null);
-INSERT INTO `tray` VALUES ('37', '3030303030303030303030303030303035', '1', 'F06', '0', '2000', null, null, null, '20', null, '1830', null, null, null, null);
-INSERT INTO `tray` VALUES ('38', '3030303030303030303030303030303036', '1', 'F07', '0', '2000', null, null, null, '20', null, '1980', null, null, null, null);
-INSERT INTO `tray` VALUES ('39', '3030303030303030303030303030303037', '1', 'F08', '0', '2000', null, null, null, '20', null, '1920', null, null, null, null);
+INSERT INTO `tray` VALUES ('1', '3030303030303030303030303030303030', '1', 'F01', '0', '2000', null, null, null, '20', null, '2000', null, null, null, null);
+INSERT INTO `tray` VALUES ('33', '3030303030303030303030303030303031', '1', 'F02', '0', '2000', null, null, null, '20', null, '2000', null, null, null, null);
+INSERT INTO `tray` VALUES ('34', '3030303030303030303030303030303032', '1', 'F03', '0', '2000', '国网宁夏固原供电公司1', '500014043', '光缆余缆架', '20', '5', '1995', null, '1566527649', null, null);
+INSERT INTO `tray` VALUES ('43', '3030303030303030303030303030303039', '1', 'F10', '0', '2000', null, null, null, '20', null, '2000', null, null, null, null);
+INSERT INTO `tray` VALUES ('35', '3030303030303030303030303030303033', '1', 'F04', '0', '2000', '国网宁夏固原供电公司1', '500052611', '钢芯铝绞线,JL/GIA,300/40', '20', '1000', '1000', null, '1566527724', null, null);
+INSERT INTO `tray` VALUES ('36', '3030303030303030303030303030303034', '1', 'F05', '0', '2000', '国网宁夏固原供电公司1', '500052611', '钢芯铝绞线,JL/GIA,300/40', '20', '2000', '0', null, '1566527724', null, null);
+INSERT INTO `tray` VALUES ('37', '3030303030303030303030303030303035', '1', 'F06', '0', '2000', '国网宁夏固原供电公司1', '500052611', '钢芯铝绞线,JL/GIA,300/40', '20', '3000', '-1000', null, '1566527724', null, null);
+INSERT INTO `tray` VALUES ('38', '3030303030303030303030303030303036', '1', 'F07', '0', '2000', null, null, null, '20', null, '2000', null, null, null, null);
+INSERT INTO `tray` VALUES ('39', '3030303030303030303030303030303037', '1', 'F08', '0', '2000', null, null, null, '20', null, '2000', null, null, null, null);
 INSERT INTO `tray` VALUES ('42', '3030303030303030303030303030303038', '1', 'F09', '0', '2000', null, null, null, '20', null, '2000', null, null, null, null);
 INSERT INTO `tray` VALUES ('44', '3030303030303030303030303030303040', '1', 'F11', '0', '2000', null, null, null, '20', null, '2000', null, null, null, null);
 
@@ -19508,24 +19517,21 @@ CREATE TABLE `wm` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=65 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=112 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of wm
 -- ----------------------------
-INSERT INTO `wm` VALUES ('44', '国网固原供电公司', '363616667', '500082631', '农夫山泉饮用水', 'G01', 'G01-010101', '瓶', 'EBA', '24', '24', 'YEBA', null, null, null, '1561002607', '11111111', null, null);
-INSERT INTO `wm` VALUES ('49', '国网固原供电公司', '360043401', '4', '4', 'G01', 'G01-010101', '4', 'EBA', '4', '24', 'YEBA', null, null, null, '1562119198', '1111', null, null);
-INSERT INTO `wm` VALUES ('51', null, '369208693', null, null, 'G01', 'G01-010101', null, 'EBA', null, '24', 'YEBA', null, null, null, '1563171795', null, null, null);
-INSERT INTO `wm` VALUES ('52', null, '363579588', null, null, 'G01', 'G01-010101', null, 'EBA', null, '24', 'YEBA', null, null, null, '1563441280', null, null, null);
-INSERT INTO `wm` VALUES ('53', null, '364564511', '500050068', '电容式电压互感器,AC110kV,油浸,μF,4,0.5', 'G01', 'G01-010101', '台', 'EBA', '1', '24', 'YEBA', null, null, null, '1564369466', null, null, null);
-INSERT INTO `wm` VALUES ('54', null, '368168203', '500050068', '电容式电压互感器,AC110kV,油浸,μF,4,0.5', 'G01', 'G01-010101', '台', 'EBA', '5', '24', 'YEBA', null, null, null, '1564369914', null, null, null);
-INSERT INTO `wm` VALUES ('55', null, '366952134', '500050068', '电容式电压互感器,AC110kV,油浸,μF,4,0.5', 'G01', 'G01-010101', '台', 'EBA', '6', '24', 'YEBA', null, null, null, '1564374640', null, null, null);
-INSERT INTO `wm` VALUES ('56', null, '363710245', '500050068', '电容式电压互感器,AC110kV,油浸,μF,4,0.5', 'G01', 'G01-010101', '台', 'EBA', '6', '24', 'YEBA', null, null, null, '1564393647', null, null, null);
-INSERT INTO `wm` VALUES ('57', null, '366305425', '500082632', '针式瓷绝缘子,P-0T,105,195', 'G01', 'G01-010101', '只', 'EBA', '1', '24', 'YEBA', null, null, null, '1564975545', null, null, null);
-INSERT INTO `wm` VALUES ('58', null, '364526965', '500050068', '电容式电压互感器,AC110kV,油浸,μF,4,0.5', 'G01', 'G01-010101', '台', 'EBA', '5', '24', 'YEBA', null, null, null, '1564975554', null, null, null);
-INSERT INTO `wm` VALUES ('59', null, '366545610', '500082632', '针式瓷绝缘子,P-0T,105,195', 'G01', 'G01-010101', '只', 'EBA', '1', '24', 'YEBA', null, null, null, '1564975703', null, null, null);
-INSERT INTO `wm` VALUES ('60', null, '368652056', '500050068', '电容式电压互感器,AC110kV,油浸,μF,4,0.5', 'G01', 'G01-010101', '台', 'EBA', '5', '24', 'YEBA', null, null, null, '1564975851', null, null, null);
-INSERT INTO `wm` VALUES ('61', null, '368747087', '500082632', '针式瓷绝缘子,P-0T,105,195', 'G01', 'G01-010101', '只', 'EBA', '1', '24', 'YEBA', null, null, null, '1564975954', null, null, null);
-INSERT INTO `wm` VALUES ('62', null, '368974101', '500050068', '电容式电压互感器,AC110kV,油浸,μF,4,0.5', 'G01', 'G01-010101', '台', 'EBA', '5', '24', 'YEBA', null, null, null, '1564976021', null, null, null);
-INSERT INTO `wm` VALUES ('63', null, '366000805', '500082632', '针式瓷绝缘子,P-0T,105,195', 'G01', 'G01-010101', '只', 'EBA', '1', '24', 'YEBA', null, null, null, '1564987165', null, null, null);
-INSERT INTO `wm` VALUES ('64', null, '366722944', '500050068', '电容式电压互感器,AC110kV,油浸,μF,4,0.5', 'G01', 'G01-010101', '台', 'EBA', '5', '24', 'YEBA', null, null, null, '1565056781', null, null, null);
+INSERT INTO `wm` VALUES ('99', null, '360000000', '500000000', '光缆接头盒,OPGW光缆用,24', 'G01', 'G01-010101', '只', 'EBA', '3', null, 'YEBA', null, null, null, '1566457244', null, null, null);
+INSERT INTO `wm` VALUES ('100', null, '360000000', '500000001', '铁塔,AC110kv,单回路,角钢,Q345,直线塔', 'G01', 'G01-010101', '吨', 'EBA', '1', '24', 'YEBA', null, null, null, '1566457244', null, null, null);
+INSERT INTO `wm` VALUES ('101', null, '360000001', '500000002', '光缆余缆架', 'G01', 'G01-010101', '付', 'EBA', '5', null, 'YEBA', null, null, null, '1566457646', null, null, null);
+INSERT INTO `wm` VALUES ('102', null, '360000002', '500000003', '光缆金具,OPGW,防震金具', 'G01', 'G01-010101', '付', 'EBA', '100', null, 'YEBA', null, null, null, '1566459010', null, null, null);
+INSERT INTO `wm` VALUES ('103', null, '360000002', '500000004', '光缆金具,OPGW,防震金具', 'G01', 'G01-010101', '付', 'EBA', '23', null, 'YEBA', null, null, null, '1566459010', null, null, null);
+INSERT INTO `wm` VALUES ('104', null, '360000002', '500000005', '光缆金具,OPGW,防震金具', 'G01', 'G01-010101', '付', 'EBA', '12', null, 'YEBA', null, null, null, '1566459010', null, null, null);
+INSERT INTO `wm` VALUES ('105', null, '360000003', '500000006', '光缆接头盒,OPGW光缆用,24', 'G01', 'G01-010101', '只', 'EBA', '4', '24', 'YEBA', null, null, null, '1566461441', null, null, null);
+INSERT INTO `wm` VALUES ('106', null, '360000004', '500000007', '光缆余缆架', 'G01', 'G01-010101', '付', 'EBA', '1', null, 'YEBA', null, null, null, '1566528050', null, null, null);
+INSERT INTO `wm` VALUES ('107', null, '360000004', '500000008', '光缆接头盒,OPGW光缆用,24', 'G01', 'G01-010101', '只', 'EBA', '1', null, 'YEBA', null, null, null, '1566528050', null, null, null);
+INSERT INTO `wm` VALUES ('108', null, '360000004', '500000009', '光缆金具,OPGW,防震金具', 'G01', 'G01-010101', '付', 'EBA', '3', null, 'YEBA', null, null, null, '1566528050', null, null, null);
+INSERT INTO `wm` VALUES ('109', null, '360000004', '500000010', '钢芯铝绞线,JL/GIA,300/40', 'G01', 'G01-010101', '吨', 'EBA', '6', '24', 'YEBA', null, null, null, '1566528050', null, null, null);
+INSERT INTO `wm` VALUES ('110', null, '360000005', '500000011', '光缆金具,OPGW,防震金具', 'G01', 'G01-010101', '付', 'EBA', '1', null, 'YEBA', null, null, null, '1566553177', null, null, null);
+INSERT INTO `wm` VALUES ('111', null, '360000005', '500000012', '光缆金具,OPGW,防震金具', 'G01', 'G01-010101', '付', 'EBA', '1', '24', 'YEBA', null, null, null, '1566553177', null, null, null);

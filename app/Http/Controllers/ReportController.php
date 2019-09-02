@@ -8,6 +8,7 @@ use App\Model\Factory;
 use App\Model\FixWorkflow;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 class ReportController extends Controller
 {
@@ -158,56 +159,87 @@ class ReportController extends Controller
             ->with('fixWorkflows', $fixWorkflows);
     }
 
-    public function quality()
+    public function quality(Request $request)
     {
-        $EntireModel = EntireModel::with("EntireInstances", "EntireInstances.FixWorkflow", "Category");
-        if (request()->get('category_unique_code')) $EntireModel->where('category_unique_code', request()->get('category_unique_code'));
-        if (request()->get('entire_model_unique_code')) $EntireModel->where('unique_code', request()->get('entire_model_unique_code'));
-        $entireModels = $EntireModel->get();
-        $fixWorkflowCounts = [];
+//        $EntireModel = EntireModel::with("EntireInstances", "EntireInstances.FixWorkflow", "Category");
+//        if (request()->get('category_unique_code')) $EntireModel->where('category_unique_code', request()->get('category_unique_code'));
+//        if (request()->get('entire_model_unique_code')) $EntireModel->where('unique_code', request()->get('entire_model_unique_code'));
+//        $entireModels = $EntireModel->get();
+//        $fixWorkflowCounts = [];
+//
+//        # 获取所有厂家
+//        $Factory = Factory::with("EntireInstances");
+//        if (request()->get("factory_name")) $Factory->where("name", request()->get("factory_name"));
+//        $factories = $Factory->get();
+//
+//        foreach ($entireModels as $entireModel) {
+//            foreach ($factories as $factory) {
+//                $EntireInstance = EntireInstance::withCount([
+//                    'FixWorkflow' => function ($fixWorkflow) {
+//                        $fixWorkflow->where('is_cycle', false);
+//                        if (request()->get('date')) {
+//                            $fixWorkflow->whereBetween('updated_at', explode("~", request()->get("date", date("Y-m-d") . "~" . date("Y-m-d"))));
+//                        }
+//                    }])
+//                    ->with(['FixWorkflow']);
+//
+//                $EntireInstance
+//                    ->where('factory_name', $factory->name)
+//                    ->where('entire_model_unique_code', $entireModel->unique_code);
+//                $totalEntireInstanceCount = $EntireInstance->count();
+//                $EntireInstance->has('FixWorkflow', '>', 2);
+//                $hasManyFixWorkflowEntireInstanceCount = $EntireInstance->count();
+//                if (($hasManyFixWorkflowEntireInstanceCount + $totalEntireInstanceCount) != 0) {
+//                    $rate = round($hasManyFixWorkflowEntireInstanceCount / $totalEntireInstanceCount, 2) * 100;
+//                } else {
+//                    $rate = 0;
+//                }
+//
+//                $fixWorkflowCounts[$entireModel->unique_code . ':' . $factory->id] = [
+//                    "entire_model_name" => $entireModel->name,
+//                    "entire_model_unique_code" => $entireModel->unique_code,
+//                    "category_name" => $entireModel->Category->name,
+//                    "factory_name" => $factory->name,
+//                    "total_count" => $totalEntireInstanceCount,
+//                    "many_fix_count" => $hasManyFixWorkflowEntireInstanceCount,
+//                    "rate" => $rate
+//                ];
+//            }
+//        }
 
-        # 获取所有厂家
-        $Factory = Factory::with("EntireInstances");
-        if (request()->get("factory_name")) $Factory->where("name", request()->get("factory_name"));
-        $factories = $Factory->get();
-
-        foreach ($entireModels as $entireModel) {
-            foreach ($factories as $factory) {
-                $EntireInstance = EntireInstance::withCount([
-                    'FixWorkflow' => function ($fixWorkflow) {
-                        $fixWorkflow->where('is_cycle', false);
-                        if (request()->get('date')) {
-                            $fixWorkflow->whereBetween('updated_at', explode("~", request()->get("date", date("Y-m-d") . "~" . date("Y-m-d"))));
-                        }
-                    }])
-                    ->with(['FixWorkflow']);
-
-                $EntireInstance
-                    ->where('factory_name', $factory->name)
-                    ->where('entire_model_unique_code', $entireModel->unique_code);
-                $totalEntireInstanceCount = $EntireInstance->count();
-                $EntireInstance->has('FixWorkflow', '>', 2);
-                $hasManyFixWorkflowEntireInstanceCount = $EntireInstance->count();
-                if (($hasManyFixWorkflowEntireInstanceCount + $totalEntireInstanceCount) != 0) {
-                    $rate = round($hasManyFixWorkflowEntireInstanceCount / $totalEntireInstanceCount, 2) * 100;
-                } else {
-                    $rate = 0;
-                }
-
-                $fixWorkflowCounts[$entireModel->unique_code . ':' . $factory->id] = [
-                    "entire_model_name" => $entireModel->name,
-                    "entire_model_unique_code" => $entireModel->unique_code,
-                    "category_name" => $entireModel->Category->name,
-                    "factory_name" => $factory->name,
-                    "total_count" => $totalEntireInstanceCount,
-                    "many_fix_count" => $hasManyFixWorkflowEntireInstanceCount,
-                    "rate" => $rate
-                ];
+        $type = $request->get("type");
+        if ($type =="stockin"){
+            //获取入库单入库物资信息(查看)
+            $stockin = DB::table("stockin")->where("time",$request->get("page"))->orderBy("id","desc")->get()->toArray();
+            $StockIn_time = $stockin[0]->StockIn_time;//获取入库时间
+            $StockIn_Number = 0;
+            $StockIn_Sum = 0;
+            foreach ($stockin as $k=>$v){
+                $StockIn_Number+=$v->StockIn_Number;//获取总数量
+                $StockIn_Sum+=$v->StockIn_Sum;//获取总金额
             }
+            $time = $request->get("page");
+        }elseif ($type =="stockout"){
+            //获取出库单出库物资信息(查看)
+            $stockin = DB::table("stockout")->where("time",$request->get("page"))->orderBy("id","desc")->get()->toArray();
+            $StockIn_time = $stockin[0]->StockOut_Time;//获取出库时间
+            $StockIn_Number = 0;
+            $StockIn_Sum = 0;
+            foreach ($stockin as $k=>$v){
+                $StockIn_Number+=$v->StockOut_Number;//获取总数量
+                $StockIn_Sum+=$v->StockOut_Sum;//获取总金额
+            }
+            $time = $request->get("page");
         }
 
         return view($this->view())
-            ->with("fixWorkflowCounts", $fixWorkflowCounts);
+            ->with('type', $type)
+            ->with('stockin', $stockin)
+            ->with('StockIn_Number', $StockIn_Number)
+            ->with('StockIn_time', $StockIn_time)
+            ->with('time', $time)
+            ->with('StockIn_Sum', $StockIn_Sum);
+//            ->with('stockinByTime', $stockinByTime);
     }
 
     public function qualityItem($entireModelUniqueCode)

@@ -6,49 +6,189 @@
     <link rel="stylesheet" href="/AdminLTE/dist/css/AdminLTE.min.css">
     <!-- iCheck for checkboxes and radio inputs -->
     <link rel="stylesheet" href="/AdminLTE/plugins/iCheck/all.css">
+    <link rel="stylesheet" href="/AdminLTE/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+    <script src="/AdminLTE/dist/js/echarts.min.js"></script>
+    <script src="/incubator-echarts-4.2.1/test/lib/esl.js"></script>
+    <script src="/incubator-echarts-4.2.1/test/lib/config.js"></script>
+    <script src="/incubator-echarts-4.2.1/test/lib/jquery.min.js"></script>
+    <script src="/incubator-echarts-4.2.1/test/lib/facePrint.js"></script>
+    <script src="/incubator-echarts-4.2.1/test/lib/testHelper.js"></script>
 @endsection
 @section('content')
     <section class="content">
         @include('Layout.alert')
         <div class="row">
-            {{--        实时--}}
-            <div class="col-md-4">
-                <div class="box box-danger" style="height: 430px;">
-                    <div class="box-header with-border">
-                        <h3>WM盘点凭据（实时）</h3>
-                    </div>
-                    <div class="box-body chart-responsive" style="height: 350px;">
+{{--            --}}{{--        实时--}}
+{{--            <div class="col-md-4">--}}
+{{--                <div class="box box-danger" style="height: 430px;">--}}
+{{--                    <div class="box-header with-border">--}}
+{{--                        <h3>WM盘点凭据（实时）</h3>--}}
+{{--                    </div>--}}
+{{--                    <div class="box-body chart-responsive" style="height: 350px;">--}}
 
-                    </div>
-                </div>
-            </div>
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
 {{--        当月--}}
-                    <div class="col-md-4">
-                        <div class="box box-danger" style="height: 430px;">
-                            <div class="box-header with-border">
-                                <h3>WM盘点凭据（当月）</h3>
-                            </div>
-                            <div class="box-body chart-responsive" style="height: 350px;">
+{{--                    <div class="col-md-4">--}}
+{{--                        <div class="box box-danger" style="height: 430px;">--}}
+{{--                            <div class="box-header with-border">--}}
+{{--                                <h3>WM盘点凭据（当月）</h3>--}}
+{{--                            </div>--}}
+{{--                            <div class="box-body chart-responsive" style="height: 350px;">--}}
 
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    近三个月--}}
+{{--                    <div class="col-md-4">--}}
+{{--                        <div class="box box-warning" style="height: 430px;">--}}
+{{--                            <div class="box-header with-border">--}}
+{{--                                <h3>WM盘点凭据（近三个月）</h3>--}}
+{{--                            </div>--}}
+{{--                            <div class="box-body chart-responsive" style="height: 350px;">--}}
+{{--                                <div class="row">--}}
+{{--                                    <div class="col-sm-8 col-md-8">--}}
+{{--                                        <div class="chart" id="chartDeviceDynamicStatusNearlyThreeMonth" style="height: 300px; position: relative;"></div>--}}
+{{--                                    </div>--}}
+
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                <div class="box box-danger">
+                    <div class="box-header with-border">
+                        <div class="row">
+                            <div class="col-sm-6 col-md-6"><h3>实时盘点</h3></div>
+                            <div class="form-group col-sm-6 col-md-6">
                             </div>
                         </div>
                     </div>
-{{--                    近三个月--}}
-                    <div class="col-md-4">
-                        <div class="box box-warning" style="height: 430px;">
-                            <div class="box-header with-border">
-                                <h3>WM盘点凭据（近三个月）</h3>
-                            </div>
-                            <div class="box-body chart-responsive" style="height: 350px;">
-                                <div class="row">
-                                    <div class="col-sm-8 col-md-8">
-                                        <div class="chart" id="chartDeviceDynamicStatusNearlyThreeMonth" style="height: 300px; position: relative;"></div>
-                                    </div>
+                    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+                    <div id="main1" style="width: 600px;height:350px;"></div>
+                    <script type="text/javascript">
+                        // 基于准备好的dom，初始化echarts实例
+                        var myChart = echarts.init(document.getElementById('main1'));
 
+                        // 指定图表的配置项和数据
+                        option = {
+                            aria: {
+                                show: true
+                            },
+                            title : {
+                                text: '盘点差异分析',
+                                subtext: '{{$date1}}',
+                                x:'center'
+                            },
+                            tooltip : {
+                                trigger: 'item',
+                                formatter: "{a} <br/>{b} : {c} ({d}%)"
+                            },
+                            legend: {
+                                orient: 'vertical',
+                                left: 'left',
+                                data: ['账务不一致','超期不出库','盘点正常']
+                            },
+                            series : [
+                                {
+                                    name: '差异分析',
+                                    type: 'pie',
+                                    radius : '55%',
+                                    center: ['50%', '60%'],
+                                    data:[
+                                        {value:32, name:'账务不一致'},
+                                        {value:20, name:'超期不出库'},
+                                        {value:55, name:'盘点正常'}
+                                    ],
+                                    itemStyle: {
+                                        emphasis: {
+                                            shadowBlur: 10,
+                                            shadowOffsetX: 0,
+                                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                        }
+                                    }
+                                }
+                            ]
+                        };
+
+                        // 使用刚指定的配置项和数据显示图表。
+                        myChart.setOption(option);
+                    </script>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                <div class="box box-danger">
+                    <div class="box-header with-border">
+                        <div class="row">
+                            <div class="col-sm-6 col-md-6"><h3>历史盘点</h3></div>
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label class="col-sm-1 col-md-4 control-label">日期:</label>
+                                    <div class="col-sm-7 col-md-7">
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </div>
+                                            <input name="updated_at" type="text" class="form-control pull-right" id="reservation" value="{{request()->get('updated_at')}}">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+                    <div id="main2" style="width: 600px;height:350px;"></div>
+                    <script type="text/javascript">
+                        // 基于准备好的dom，初始化echarts实例
+                        var myChart = echarts.init(document.getElementById('main2'));
+
+                        // 指定图表的配置项和数据
+                        option = {
+                            aria: {
+                                show: true
+                            },
+                            title : {
+                                text: '盘点差异分析',
+                                subtext: '{{$date1}}',
+                                x:'center'
+                            },
+                            tooltip : {
+                                trigger: 'item',
+                                formatter: "{a} <br/>{b} : {c} ({d}%)"
+                            },
+                            legend: {
+                                orient: 'vertical',
+                                left: 'left',
+                                data: ['账务不一致','超期不出库','盘点正常']
+                            },
+                            series : [
+                                {
+                                    name: '差异分析',
+                                    type: 'pie',
+                                    radius : '55%',
+                                    center: ['50%', '60%'],
+                                    data:[
+                                        {value:32, name:'账务不一致'},
+                                        {value:20, name:'超期不出库'},
+                                        {value:55, name:'盘点正常'}
+                                    ],
+                                    itemStyle: {
+                                        emphasis: {
+                                            shadowBlur: 10,
+                                            shadowOffsetX: 0,
+                                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                        }
+                                    }
+                                }
+                            ]
+                        };
+
+                        // 使用刚指定的配置项和数据显示图表。
+                        myChart.setOption(option);
+                    </script>
+                </div>
+            </div>
         </div>
 {{--        --}}{{--筛选--}}
 {{--        <section class="content-header">--}}
@@ -195,11 +335,11 @@
                     </tbody>
                 </table>
             </div>
-            @if($fixWorkflows->hasPages())
-                <div class="box-footer">
-                    {{ $fixWorkflows->links() }}
-                </div>
-            @endif
+{{--            @if($fixWorkflows->hasPages())--}}
+{{--                <div class="box-footer">--}}
+{{--                    {{ $fixWorkflows->links() }}--}}
+{{--                </div>--}}
+{{--            @endif--}}
         </div>
     </section>
 @endsection

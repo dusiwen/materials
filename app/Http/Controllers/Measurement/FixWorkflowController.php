@@ -32,63 +32,57 @@ class FixWorkflowController extends Controller
      */
     public function index()
     {
-        $str = file_get_contents('../workerman/stdoutFile.txt');
-//        //用换行的分割符（\r\n）把字符串分割为数组，也就是把每一行分割成数组的一个值
-//
-//        $array = explode("\r\n",$str);
-//        for ($i=0;$i<count($array);$i++){
-//            $url=$array[$i];
+        $date1 = date("Y-m-d",time());//获取当前月日
+
+        //1.获取传感器重量放到相应的盘点表中
+        $tray = DB::table("tray")->where("MaterialCode","!=",NULL)->get()->toArray();
+        foreach ($tray as $k=>$v){
+            $MaterialCode = $v->MaterialCode;  //获取物资编码
+            $MaterialName = $v->MaterialName;  //获取物资编码
+            $weights = $v->weights;  //获取传感器传回的重量值
+            if ($weights >100){
+                $weights = "0";
+            }
+            $EachWeight = DB::table("materials")->where("MaterialCode",$MaterialCode)->get()->toArray();  //根据物资编码获取物资的每个重量
+            $weight = ceil($weights/$EachWeight[0]->EachWeight);  //数量向上取整(后期要改)
+            $wm = DB::table("wm")->where("MaterialsDescribe",$MaterialName)->update(["WMNumber"=>$weight]);
+            $wm = DB::table("tray")->where("MaterialCode",$MaterialCode)->update(["weight"=>$weights]);
+        }
+        //2.获取wm盘点表所有数据
+        $wm = DB::table("wm")->orderBy("id","desc")->get()->toArray();
+
+
+//        if (\request()->get('status') == 'CHECKED') {
+//            $fixWorkflows = FixWorkflow::with([
+//                'EntireInstance',
+//                'EntireInstance.Category',
+//                'EntireInstance.EntireModel',
+//                'EntireInstance.EntireModel.Category',
+//                'EntireInstance.EntireModel.Measurements',
+//                'EntireInstance.EntireModel.Measurements.PartModel',
+//                'Processor',
+//                'FixWorkflowProcesses'
+//            ])
+//                ->orderByDesc('updated_at')
+//                ->where('status', 'FIXED')
+//                ->paginate();
+//        } else {
+//            $fixWorkflows = FixWorkflow::with([
+//                'EntireInstance',
+//                'EntireInstance.Category',
+//                'EntireInstance.EntireModel',
+//                'EntireInstance.EntireModel.Category',
+//                'EntireInstance.EntireModel.Measurements',
+//                'EntireInstance.EntireModel.Measurements.PartModel',
+//                'Processor',
+//                'FixWorkflowProcesses'
+//            ])
+//                ->orderByDesc('updated_at')
+//                ->paginate();
 //        }
-//        //可以根据自己需要，循环输出从开始行到结束行的内容
-//        //示例：输出文本中第4行内容（因为数组的键值是从0开始的，所以第4行也就是键值3）
-//        $weight = hexdec(substr($array[$i-4],54,4)); //16进制转为10进制获取重量
-//            dd($weight);
-//        $date = DB::table("stockin")->where("id",$id)->get(); //获取入库单信息
-//
-//        $StockIn_EachWeight = $date[0]->StockIn_EachWeight;  //获取入库单物资单个重量
-//        $WMNumber = $weight/$StockIn_EachWeight;  //根据入库单单个重量算出盘点数量
-//        $WMNumbers = ceil($WMNumber);
-        $stockin = DB::table("stockin")->orderBy('id', 'desc')->first();  //获取最后添加的一条数据
-        $wms = DB::table("wm")->orderBy('id','desc')->first();  //获取最后添加的一条数据
-//        dd($stockin->StockIn_EachWeight);  //获取最后一次添加的数据每个重量
-//        $WMNumber = $weight/$stockin->StockIn_EachWeight;  //根据入库单单个重量算出盘点数量
-        $WMNumbers = $str;
-//        dd($WMNumbers);
-        if ($wms->WMNumber !=$WMNumbers ){
-            DB::table("wm")->where("id",$wms->id)->update(["WMNumber"=>$WMNumbers]);
-        }
-        $wm = DB::table("wm")->orderBy("id","desc")->get()->toArray(); //获取wm盘点表所有数据
-        if (\request()->get('status') == 'CHECKED') {
-            $fixWorkflows = FixWorkflow::with([
-                'EntireInstance',
-                'EntireInstance.Category',
-                'EntireInstance.EntireModel',
-                'EntireInstance.EntireModel.Category',
-                'EntireInstance.EntireModel.Measurements',
-                'EntireInstance.EntireModel.Measurements.PartModel',
-                'Processor',
-                'FixWorkflowProcesses'
-            ])
-                ->orderByDesc('updated_at')
-                ->where('status', 'FIXED')
-                ->paginate();
-        } else {
-            $fixWorkflows = FixWorkflow::with([
-                'EntireInstance',
-                'EntireInstance.Category',
-                'EntireInstance.EntireModel',
-                'EntireInstance.EntireModel.Category',
-                'EntireInstance.EntireModel.Measurements',
-                'EntireInstance.EntireModel.Measurements.PartModel',
-                'Processor',
-                'FixWorkflowProcesses'
-            ])
-                ->orderByDesc('updated_at')
-                ->paginate();
-        }
 
         return view($this->view())
-            ->with('fixWorkflows', $fixWorkflows)
+            ->with('date1', $date1)
             ->with('wm', $wm);
     }
 

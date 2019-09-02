@@ -31,8 +31,8 @@
                             <label class="col-sm-3 control-label">入库类型：</label>
                             <div class="col-sm-10 col-md-8">
                                 <select id="selCategory" name="StockIn_Type" class="form-control select2" style="width: 100%;" onchange="fnGetPartModelByCategoryUniqueCode(this.value)">
-                                    @foreach($sockin_type as $v)
-                                    <option value="{{$v->sockin_type}}">{{$v->sockin_type}}</option>
+                                    @foreach($stockin_type as $v)
+                                    <option value="{{$v->stockin_type}}">{{$v->stockin_type}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -197,7 +197,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($stockinTest as $v)
+                                @foreach($stockintest as $v)
                                     <tr>
                                         <th>{{$i++}}</th>
                                         <th>{{$v->StockIn_MaterialCode}}</th>
@@ -470,7 +470,7 @@
                     $.ajax({
                         url: `{{url('entire/modelIdCode/create')}}`,
                         type: "get",
-                        data: {
+                        data: {type:"stockin"
                         },
                         async: true,
                         success: function (response) {

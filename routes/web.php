@@ -39,7 +39,7 @@ Route::group(['middleware' => ['web-check-login', 'web-check-permission', 'web-g
         Route::get('/', 'CategoryController@index')->name('category.index');  # 列表
         Route::get('create', 'CategoryController@create')->name('category.create');  # 新建页面
         Route::post('/', 'CategoryController@store')->name('category.store');  # 新建
-        Route::get('/{id}', 'CategoryController@show')->name('categoryItem.show');  # 详情页面
+        Route::get('/{id}', 'CategoryController@show')->name('category.show');  # 详情页面
         Route::get('/{id}/edit', 'CategoryController@edit')->name('category.edit');  # 编辑页面
         Route::put('/{id}', 'CategoryController@update')->name('category.update');  # 编辑
         Route::delete('/{id}', 'CategoryController@destroy')->name('category.destroy');  # 删除
@@ -145,7 +145,6 @@ Route::group(['middleware' => ['web-check-login', 'web-check-permission', 'web-g
             Route::get('/{warehouseReportSerialNumber}/edit', 'ReportController@edit')->name('report.edit');  # 编辑页面
             Route::put('/{warehouseReportSerialNumber}', 'ReportController@update')->name('report.update');  # 编辑
             Route::delete('/{warehouseReportSerialNumber}', 'ReportController@destroy')->name('report.destroy');  # 删除
-            Route::get('/{warehouseReportSerialNumber}', 'ReportController@stockin')->name('report.stockin');  # 入库
         });
     });
 

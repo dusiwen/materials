@@ -88,7 +88,6 @@ class PlanController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
         try {
             $time = $request->get("time");
             DB::table("stockin")->where("time",$time)->update(["StockIn_Status"=>"未入库"]);
@@ -100,7 +99,7 @@ class PlanController extends Controller
             $exceptionFile = $exception->getFile();
             // dd("{$exceptionMessage}「{$exceptionLine}:{$exceptionFile}」");
             // return back()->withInput()->with('danger',"{$exceptionMessage}「{$exceptionLine}:{$exceptionFile}」");
-            return Response::make("意外错误3", 500);
+            return Response::make("意外错误", 500);
         }
     }
 

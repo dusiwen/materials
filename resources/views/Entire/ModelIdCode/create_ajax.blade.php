@@ -74,11 +74,17 @@
             url: `{{url('entire/modelIdCode')}}`,
             type: "post",
             // data: $("#frmStoreModelIdCode").serialize(),
-            data: {id:$("input[type='radio']:checked").val()},
+            data: {id:$("input[type='radio']:checked").val(),
+            type: `{{$type}}`},
             async: true,
             success: function (response) {
                 // alert(response);
-                location.href = ("{{url('entire/model/1/edit')}}");
+                if (response == "stockin"){
+                    location.href = ("{{url('entire/model/1/edit')}}");
+                }else {
+                    location.href = ("{{url('category')}}");
+                }
+
                 // $("#txtCode").val('');
                 // $("#txtCode").focus();
             },

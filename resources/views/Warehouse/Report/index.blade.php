@@ -19,22 +19,50 @@
             <div class="box-body">
                 <form action="" class="form-horizontal">
                     <div class="row">
-                        <div class="col-md-2">
+                        <div class="col-md-4">
                             <div class="form-group">
-                                <label class="col-sm-5 col-md-5 control-label">单位：</label>
+                                <label class="col-sm-1 col-md-4 control-label">项目名称：</label>
                                 <div class="col-sm-7 col-md-7">
-                                    <select name="direction" class="form-control select2" style="width:100%;">
-{{--                                        <option value="">全部</option>--}}
+                                    <select name="project" class="form-control select2" style="width:100%;">
+                                        <option value="">全部</option>
 {{--                                        <option value="IN" {{request()->get('direction') == 'IN' ? 'selected' : ''}}>入所</option>--}}
-{{--                                        <option value="OUT" {{request()->get('direction') == 'OUT' ? "selected" : ''}}>出所</option>--}}
+                                        @foreach(\App\Model\project::all() as $v)
+                                            <option value="{{$v->project_name}}">{{$v->project_name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label class="col-sm-1 col-md-4  control-label">物资名称：</label>
+                                <div class="col-sm-7 col-md-7">
+                                    <select name="MaterialName" class="form-control select2" style="width:100%;">
+                                        <option value="">全部</option>
+                                        @foreach(\App\Model\materials::all() as $v)
+                                            <option value="{{$v->MaterialName}}">{{$v->MaterialName}}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label class="col-sm-3 col-md-3 control-label">日期:</label>
-                                <div class="col-sm-8 col-md-8">
+                                <label class="col-sm-1 col-md-4 control-label">入库类型：</label>
+                                <div class="col-sm-7 col-md-7">
+                                    <select name="stockin_type" class="form-control select2" style="width:100%;">
+                                        <option value="">全部</option>
+                                        @foreach(\App\Model\stockin_type::all() as $v)
+                                            <option value="{{$v->stockin_type}}">{{$v->stockin_type}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label class="col-sm-1 col-md-4 control-label">日期:</label>
+                                <div class="col-sm-7 col-md-7">
                                     <div class="input-group">
                                         <div class="input-group-addon">
                                             <i class="fa fa-calendar"></i>
@@ -45,32 +73,6 @@
                             </div>
                         </div>
                         <div class="col-md-2">
-                            <div class="form-group">
-                                <label class="col-sm-5 col-md-5  control-label">库存地点：</label>
-                                <div class="col-sm-7 col-md-7">
-                                    <select name="category_unique_code" class="form-control select2" style="width:100%;">
-                                        <option value="">全部</option>
-{{--                                        @foreach(\App\Model\Category::all() as $category)--}}
-{{--                                            <option value="{{$category->unique_code}}" {{request()->get('category_unique_code') == $category->unique_code ? 'selected' : ''}}>{{$category->name}}</option>--}}
-{{--                                        @endforeach--}}
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="col-sm-3 col-md-3  control-label">物料凭证号：</label>
-                                <div class="col-sm-8 col-md-8">
-                                    <select name="type" class="form-control select2" style="width:100%;">
-                                        <option value="">全部</option>
-{{--                                        @foreach(\App\Model\WarehouseReport::$TYPE as $typeKey => $typeValue)--}}
-{{--                                            <option value="{{$typeKey}}" {{request()->get('type') == $typeKey ? 'selected' : ''}}>{{$typeValue}}</option>--}}
-{{--                                        @endforeach--}}
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-1">
                             <button class="btn btn-info btn-flat">筛选</button>
                         </div>
                     </div>
@@ -97,6 +99,7 @@
                         <th>#</th>
                         <th>物资编码</th>
                         <th>物资名称</th>
+                        <th>批次</th>
                         <th>单位</th>
                         <th>数量</th>
                         <th>总重量(kg)</th>
@@ -107,17 +110,23 @@
 {{--                        <th>供应商</th>--}}
                         <th>状态</th>
                         <th>入库类型</th>
+                        <th>入库时间</th>
                         <th>备注</th>
                         <th>操作</th>
                     </tr>
                     </thead>
                     <tbody>
                     @foreach($stockinByTime as $value)
+                        @foreach($value as $k=>$v)
                         <tr>
-                            @foreach($value as $v)
-                            <th>{{$v->id}}</th>
+                            @if($k == 0)
+                            <th rowspan="{{count([$v])}}">{{$v->id}}</th>
+                            @else
+                                <th></th>
+                            @endif
                             <th>{{$v->StockIn_MaterialCode}}</th>
                             <th>{{$v->StockIn_MaterialName}}</th>
+                            <th>{{$v->StockIn_Batch}}</th>
                             <th>{{$v->StockIn_Unit}}</th>
                             <th>{{$v->StockIn_Number}}</th>
                             <th>{{$v->StockIn_Weight}}</th>
@@ -127,13 +136,15 @@
 {{--                            <th>宁夏</th>--}}
                             <th>{{$v->StockIn_Status}}</th>
                             <th>{{$v->StockIn_Type}}</th>
+                            <th>{{$v->StockIn_times}}</th>
                             <th>{{$v->StockIn_Remark}}</th>
+                            @if($k == 0)
                             @if($v->StockIn_Status == "未入库")
                                 <td>
                                     <div class="btn-group btn-group-lg">
                                         {{--                                        <a href="{{url('warehouse/report',$warehouseReport->serial_number)}}?page={{request()->get('page',1)}}&direction={{request()->get('direction')}}&updated_at={{request()->get('updated_at')}}&category_unique_code={{request()->get('category_unique_code')}}&type={{request()->get('type')}}" class="btn btn-primary btn-flat">查看</a>--}}
                                         <a href="javascript:" onclick="stock({{$v->id}})" class="btn btn-primary btn-flat">入库</a>
-                                        <a href="javascript:" onclick="fnDelete({{$v->id}})" class="btn btn-danger btn-flat">冲销</a>
+                                        <a href="javascript:" onclick="fnDelete({{$v->time}})" class="btn btn-danger btn-flat">冲销</a>
                                     </div>
                                 </td>
                             @elseif($v->StockIn_Status == "扫码确认")
@@ -141,16 +152,16 @@
                                     <div class="btn-group btn-group-lg">
                                         {{--                                        <a href="{{url('warehouse/report',$warehouseReport->serial_number)}}?page={{request()->get('page',1)}}&direction={{request()->get('direction')}}&updated_at={{request()->get('updated_at')}}&category_unique_code={{request()->get('category_unique_code')}}&type={{request()->get('type')}}" class="btn btn-primary btn-flat">查看</a>--}}
                                         <a href="{{url("warehouse/plan")}}?page={{$v->time}}" class="btn btn-primary btn-flat">扫码确认</a>
-                                        <a href="javascript:" onclick="fnDelete({{$v->id}})" class="btn btn-danger btn-flat">冲销</a>
+                                        <a href="javascript:" onclick="fnDelete({{$v->time}})" class="btn btn-danger btn-flat">冲销</a>
                                     </div>
                                 </td>
                             @else
                                 <td>
                                     <div class="btn-group btn-group-lg">
-                                        {{--                                        <a href="{{url('warehouse/report',$warehouseReport->serial_number)}}?page={{request()->get('page',1)}}&direction={{request()->get('direction')}}&updated_at={{request()->get('updated_at')}}&category_unique_code={{request()->get('category_unique_code')}}&type={{request()->get('type')}}" class="btn btn-primary btn-flat">查看</a>--}}
-                                        <a href="" class="btn btn-primary btn-flat">查看</a>
+                                        <a href="{{url("/report/quality")}}?page={{$v->time}}&type=stockin" class="btn btn-primary btn-flat">查看</a>
                                     </div>
                                 </td>
+                            @endif
                             @endif
                             <td>
 
@@ -159,17 +170,17 @@
 {{--                                    <a href="javascript:" onclick="fnDelete({{$warehouseReport->serial_number}})" class="btn btn-danger btn-flat">删除</a>--}}
 {{--                                </div>--}}
                             </td>
-                            @endforeach
                         </tr>
+                        @endforeach
                     @endforeach
                     </tbody>
                 </table>
             </div>
-            @if($warehouseReports->hasPages())
-                <div class="box-footer">
-                    {{ $warehouseReports->links() }}
-                </div>
-            @endif
+{{--            @if($stockinByTime->hasPages())--}}
+{{--                <div class="box-footer">--}}
+{{--                    {{ $stockinByTime->links() }}--}}
+{{--                </div>--}}
+{{--            @endif--}}
         </div>
     </section>
 @endsection
@@ -208,11 +219,11 @@
          * 删除
          * @param {int} id 编号
          */
-        fnDelete = function (id) {
+        fnDelete = function (time) {
             $.ajax({
-                url: `{{url('warehouse/report')}}/${id}`,
+                url: `{{url('warehouse/report')}}/${time}`,
                 type: "delete",
-                data: {id: id},
+                data: {time: time},
                 success: function (response) {
                     // console.log('success:', response);
                     alert(response);

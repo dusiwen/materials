@@ -31,15 +31,18 @@ class ModelIdCodeController extends Controller
     }
 
     /**
+     * ajax 添加物资入库单->物资选择->物资列表
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function create()
     {
+        $type = \request()->get("type");
         $materials = DB::table("materials")->get()->toArray();
 //        dd($materials);
         if (\request()->ajax()) return view($this->view('create_ajax'))
+            ->with("type",$type)
             ->with("materials",$materials);
     }
 
@@ -71,7 +74,7 @@ class ModelIdCodeController extends Controller
             session(["MaterialsId"=>$request->get("id")]);//获取选择物资的id并存入session中
 //            $request->session()->flash("MaterialsId",$request->get("id"));
 
-            return Response::make('选择成功');
+            return Response::make($request->get("type"));
         } catch (\Exception $exception) {
             return Response::make('意外错误', 500);
         }
