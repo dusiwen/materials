@@ -159,25 +159,31 @@
                                     {{--                                    <th>托盘编码</th>--}}
                                     <th>托盘位置</th>
                                     <th>物资名称</th>
-                                    <th>可出库数量</th>
+                                    <th>已载数量</th>
+                                    <th>可出数量</th>
                                     <th>出库数量</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 @foreach($tray as $v)
                                     <tr>
-                                        <th>
+                                        <th style="width: 7%">
                                             <input name="tray[]" id="${response[key].unique_code}" type="checkbox" value="{{$v->id}}">
                                         </th>
                                         {{--                                        <th>{{$v->tray_code}}</th>--}}
-                                        <th>{{$v->place}}</th>
-                                        <th>{{$v->MaterialName}}</th>
+                                        <th style="width: 15%">{{$v->place}}</th>
+                                        <th style="width: 35%">{{$v->MaterialName}}</th>
                                         @if(!empty($EachWeight) && !empty($v->ResidueWeight))
-                                            <th>{{intval($v->weight/$EachWeight)}}</th>
+                                            <th style="width: 12%">{{intval($v->weight/$EachWeight)}}</th>
                                         @else
                                             <th></th>
                                         @endif
-                                        <th>
+                                        @if(!empty($EachWeight) && !empty($v->ResidueWeight))
+                                            <th style="width: 12%">{{intval($v->weight/$EachWeight)}}</th>
+                                        @else
+                                            <th></th>
+                                        @endif
+                                        <th style="width: 15%">
                                             <input placeholder="数量" class="form-control" type="text" name="Numbers[]" value="">
                                         </th>
                                     </tr>
@@ -368,7 +374,6 @@
          */
         fnCreateEntireModelIdCode = () => {
             $.ajax({
-                {{--url: `{{url('maintain/post')}}`,--}}
                 url: `{{url('entire/modelIdCode/create')}}`,
                 type: "get",
                 data: {type:"stockout"

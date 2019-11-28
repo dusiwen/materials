@@ -70,7 +70,7 @@
                                         <td>{{$differ[0]->StorageType}}</td>
                                     </tr>
                                     <tr>
-                                        <td style="width: 25%; text-align: right;"><b>仓位：</b></td>
+                                        <td style="width: 25%; text-align: right;"><b>仓位号：</b></td>
                                         <td>{{$differ[0]->Positions}}</td>
                                     </tr>
                                     <tr>

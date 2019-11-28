@@ -249,21 +249,27 @@
 {{--                                    <th>托盘编码</th>--}}
                                     <th>托盘位置</th>
                                     <th>物资名称</th>
-                                    <th>剩余可装数量</th>
+                                    <th>已载数量</th>
+                                    <th>可载数量</th>
                                     <th>上架数量</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 @foreach($tray as $v)
                                     <tr>
-                                        <th>
+                                        <th style="width: 7%">
                                             <input name="tray[]" id="${response[key].unique_code}" type="checkbox" value="{{$v->id}}">
                                         </th>
 {{--                                        <th>{{$v->tray_code}}</th>--}}
-                                        <th>{{$v->place}}</th>
-                                        <th>{{$v->MaterialName}}</th>
+                                        <th style="width: 15%">{{$v->place}}</th>
+                                        <th style="width: 35%">{{$v->MaterialName}}</th>
                                         @if(!empty($EachWeight) && !empty($v->ResidueWeight))
-                                        <th>{{intval($v->ResidueWeight/$EachWeight)}}</th>
+                                            <th style="width: 12%">{{intval($v->weight/$EachWeight)}}</th>
+                                        @else
+                                            <th></th>
+                                        @endif
+                                        @if(!empty($EachWeight) && !empty($v->ResidueWeight))
+                                        <th style="width: 12%">{{intval($v->ResidueWeight/$EachWeight)}}</th>
                                         @else
                                         <th></th>
                                         @endif
@@ -274,7 +280,7 @@
                                         {{--                                                                            <a href="javascript:" onclick="fnDelete({{$warehouseReport->serial_number}})" class="btn btn-danger btn-flat">删除</a>--}}
                                         {{--                                                                        </div>--}}
                                         {{--                                    </td>--}}
-                                        <th>
+                                        <th style="width: 20%">
 {{--                                            <div class="form-group">--}}
 {{--                                                <label class="col-sm-3 control-label">单价：</label>--}}
 {{--                                                <div class="col-sm-10 col-md-8">--}}

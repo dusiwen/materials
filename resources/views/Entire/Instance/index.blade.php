@@ -160,7 +160,7 @@
             <div class="col-md-12">
                 <div class="box box-primary">
                     <div class="box-header with-border">
-{{--                        <h1 class="box-title">设备列表&nbsp;&nbsp;总数：{{$total}}&nbsp;&nbsp;总数：{{$using}}&nbsp;&nbsp;在用：{{$fixed}}&nbsp;&nbsp;送检：{{$returnFactory}}&nbsp;&nbsp;在修：{{$fixing}}</h1>--}}
+                        <h1 class="box-title">托盘列表</h1>
                         {{--右侧最小化按钮--}}
                         <div class="box-tools pull-right">
 {{--                            <a href="{{url('warehouse/report/scanInBatch')}}?page={{request()->get('page',1)}}" class="btn btn-default btn-lg btn-flat">批量扫码入所</a>--}}
@@ -175,11 +175,12 @@
                                 <th>托盘编码</th>
                                 <th>位置</th>
                                 <th>承重范围（kg）</th>
-                                <th>精度</th>
                                 <th>项目编号</th>
                                 <th>物资编码</th>
                                 <th>重量（kg）</th>
                                 <th>剩余重量（kg）</th>
+                                <th>电压V</th>
+                                <th>信号强度</th>
                                 <th>状态</th>
                                 <th>操作</th>
                             </tr>
@@ -191,14 +192,15 @@
                                     <th>{{$v->tray_code}}</th>
                                     <th>{{$v->place}}</th>
                                     <th>{{$v->min}}~{{$v->max}}</th>
-                                    <th>{{$v->precision}}</th>
                                     <th>{{$v->ProjectName}}</th>
                                     <th>{{$v->MaterialCode}}</th>
                                     <th>{{$v->weight}}</th>
                                     <th>{{$v->ResidueWeight}}</th>
+                                    <th>{{$v->BatteryV}}V</th>
+                                    <th>{{$v->CSQ}}dBm</th>
                                     @if($v->ResidueWeight == 0)
                                     <th>已满</th>
-                                    @elseif($v->ResidueWeight == $v->max-20)
+                                    @elseif($v->ResidueWeight == $v->max)
                                     <th>空置</th>
                                     @else
                                     <th>未满</th>

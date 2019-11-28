@@ -18,44 +18,6 @@
     <section class="content">
         @include('Layout.alert')
         <div class="row">
-{{--            --}}{{--        实时--}}
-{{--            <div class="col-md-4">--}}
-{{--                <div class="box box-danger" style="height: 430px;">--}}
-{{--                    <div class="box-header with-border">--}}
-{{--                        <h3>WM盘点凭据（实时）</h3>--}}
-{{--                    </div>--}}
-{{--                    <div class="box-body chart-responsive" style="height: 350px;">--}}
-
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        当月--}}
-{{--                    <div class="col-md-4">--}}
-{{--                        <div class="box box-danger" style="height: 430px;">--}}
-{{--                            <div class="box-header with-border">--}}
-{{--                                <h3>WM盘点凭据（当月）</h3>--}}
-{{--                            </div>--}}
-{{--                            <div class="box-body chart-responsive" style="height: 350px;">--}}
-
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                    近三个月--}}
-{{--                    <div class="col-md-4">--}}
-{{--                        <div class="box box-warning" style="height: 430px;">--}}
-{{--                            <div class="box-header with-border">--}}
-{{--                                <h3>WM盘点凭据（近三个月）</h3>--}}
-{{--                            </div>--}}
-{{--                            <div class="box-body chart-responsive" style="height: 350px;">--}}
-{{--                                <div class="row">--}}
-{{--                                    <div class="col-sm-8 col-md-8">--}}
-{{--                                        <div class="chart" id="chartDeviceDynamicStatusNearlyThreeMonth" style="height: 300px; position: relative;"></div>--}}
-{{--                                    </div>--}}
-
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                 <div class="box box-danger">
                     <div class="box-header with-border">
@@ -66,7 +28,7 @@
                         </div>
                     </div>
                     <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
-                    <div id="main1" style="width: 600px;height:350px;"></div>
+                    <div id="main1" style="width: 90%;height:350%"></div>
                     <script type="text/javascript">
                         // 基于准备好的dom，初始化echarts实例
                         var myChart = echarts.init(document.getElementById('main1'));
@@ -88,7 +50,7 @@
                             legend: {
                                 orient: 'vertical',
                                 left: 'left',
-                                data: ['账务不一致','超期不出库','盘点正常']
+                                data: ['账物不一致','超期未出库','盘点正常']
                             },
                             series : [
                                 {
@@ -97,9 +59,9 @@
                                     radius : '55%',
                                     center: ['50%', '60%'],
                                     data:[
-                                        {value:32, name:'账务不一致'},
-                                        {value:20, name:'超期不出库'},
-                                        {value:55, name:'盘点正常'}
+                                        {value:"{{$byz}}", name:'账物不一致', url: "{{url("measurement/fixWorkflow?date1=$date1&name=账物不一致")}}"},
+                                        {value:"{{$cq}}", name:'超期未出库', url: "{{url("measurement/fixWorkflow?date1=$date1&name=超期未出库")}}"},
+                                        {value:"{{$zc}}", name:'盘点正常', url: "{{url("measurement/fixWorkflow?date1=$date1&name=盘点正常")}}"}
                                     ],
                                     itemStyle: {
                                         emphasis: {
@@ -114,6 +76,11 @@
 
                         // 使用刚指定的配置项和数据显示图表。
                         myChart.setOption(option);
+                        myChart.on('click', function(param) {
+                            //console.log(param);
+                            var url = param.data.url;
+                            window.location.href = url;
+                        });
                     </script>
                 </div>
             </div>
@@ -122,23 +89,22 @@
                     <div class="box-header with-border">
                         <div class="row">
                             <div class="col-sm-6 col-md-6"><h3>历史盘点</h3></div>
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="col-sm-1 col-md-4 control-label">日期:</label>
-                                    <div class="col-sm-7 col-md-7">
+{{--                                    <label class="col-sm-1 col-md-4 control-label">日期:</label>--}}
                                         <div class="input-group">
                                             <div class="input-group-addon">
                                                 <i class="fa fa-calendar"></i>
                                             </div>
-                                            <input name="updated_at" type="text" class="form-control pull-right" id="reservation" value="{{request()->get('updated_at')}}">
+                                            <input type="text" class="form-control pull-right" id="reservation">
+{{--                                            <input name="updated_at" type="text" class="form-control pull-right" id="datepicker" value="{{request()->get('updated_at')}}">--}}
                                         </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
-                    <div id="main2" style="width: 600px;height:350px;"></div>
+                    <div id="main2" style="width: 90%;height:350%"></div>
                     <script type="text/javascript">
                         // 基于准备好的dom，初始化echarts实例
                         var myChart = echarts.init(document.getElementById('main2'));
@@ -160,7 +126,7 @@
                             legend: {
                                 orient: 'vertical',
                                 left: 'left',
-                                data: ['账务不一致','超期不出库','盘点正常']
+                                data: ['账物不一致','超期未出库','盘点正常']
                             },
                             series : [
                                 {
@@ -169,8 +135,8 @@
                                     radius : '55%',
                                     center: ['50%', '60%'],
                                     data:[
-                                        {value:32, name:'账务不一致'},
-                                        {value:20, name:'超期不出库'},
+                                        {value:32, name:'账物不一致'},
+                                        {value:20, name:'超期未出库'},
                                         {value:55, name:'盘点正常'}
                                     ],
                                     itemStyle: {
@@ -190,74 +156,6 @@
                 </div>
             </div>
         </div>
-{{--        --}}{{--筛选--}}
-{{--        <section class="content-header">--}}
-{{--            <div class="box box-info">--}}
-{{--                <div class="box-header with-border">--}}
-{{--                    <h3 class="box-title">筛选</h3>--}}
-{{--                </div>--}}
-{{--                <div class="box-body">--}}
-{{--                    <form action="" class="form-horizontal">--}}
-{{--                        <div class="row">--}}
-{{--                            <div class="col-md-2">--}}
-{{--                                <div class="form-group">--}}
-{{--                                    <label class="col-sm-5 col-md-5 control-label">单位：</label>--}}
-{{--                                    <div class="col-sm-7 col-md-7">--}}
-{{--                                        <select name="direction" class="form-control select2" style="width:100%;">--}}
-{{--                                            --}}{{--                                        <option value="">全部</option>--}}
-{{--                                            --}}{{--                                        <option value="IN" {{request()->get('direction') == 'IN' ? 'selected' : ''}}>入所</option>--}}
-{{--                                            --}}{{--                                        <option value="OUT" {{request()->get('direction') == 'OUT' ? "selected" : ''}}>出所</option>--}}
-{{--                                        </select>--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                            <div class="col-md-4">--}}
-{{--                                <div class="form-group">--}}
-{{--                                    <label class="col-sm-3 col-md-3 control-label">日期:</label>--}}
-{{--                                    <div class="col-sm-8 col-md-8">--}}
-{{--                                        <div class="input-group">--}}
-{{--                                            <div class="input-group-addon">--}}
-{{--                                                <i class="fa fa-calendar"></i>--}}
-{{--                                            </div>--}}
-{{--                                            <input name="updated_at" type="text" class="form-control pull-right" id="reservation" value="{{request()->get('updated_at')}}">--}}
-{{--                                        </div>--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                            <div class="col-md-2">--}}
-{{--                                <div class="form-group">--}}
-{{--                                    <label class="col-sm-5 col-md-5  control-label">库存地点：</label>--}}
-{{--                                    <div class="col-sm-7 col-md-7">--}}
-{{--                                        <select name="category_unique_code" class="form-control select2" style="width:100%;">--}}
-{{--                                            <option value="">全部</option>--}}
-{{--                                            --}}{{--                                        @foreach(\App\Model\Category::all() as $category)--}}
-{{--                                            --}}{{--                                            <option value="{{$category->unique_code}}" {{request()->get('category_unique_code') == $category->unique_code ? 'selected' : ''}}>{{$category->name}}</option>--}}
-{{--                                            --}}{{--                                        @endforeach--}}
-{{--                                        </select>--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                            <div class="col-md-3">--}}
-{{--                                <div class="form-group">--}}
-{{--                                    <label class="col-sm-3 col-md-3  control-label">物料凭证号：</label>--}}
-{{--                                    <div class="col-sm-8 col-md-8">--}}
-{{--                                        <select name="type" class="form-control select2" style="width:100%;">--}}
-{{--                                            <option value="">全部</option>--}}
-{{--                                            --}}{{--                                        @foreach(\App\Model\WarehouseReport::$TYPE as $typeKey => $typeValue)--}}
-{{--                                            --}}{{--                                            <option value="{{$typeKey}}" {{request()->get('type') == $typeKey ? 'selected' : ''}}>{{$typeValue}}</option>--}}
-{{--                                            --}}{{--                                        @endforeach--}}
-{{--                                        </select>--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                            <div class="col-md-1">--}}
-{{--                                <button class="btn btn-info btn-flat">筛选</button>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    </form>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        </section>--}}
         <div class="box box-primary">
             <div class="box-header with-border">
                 <h1 class="box-title">WM盘点列表</h1>
@@ -288,24 +186,6 @@
                     <tbody>
                     @foreach($wm as $v)
                         <tr>
-{{--                            <td>{{$fixWorkflow->serial_number}}</td>--}}
-{{--                            <td>{{$fixWorkflow->updated_at}}</td>--}}
-{{--                            <td>{{$fixWorkflow->EntireInstance->Category->name}}</td>--}}
-{{--                            <td>{{$fixWorkflow->EntireInstance->EntireModel->name}}</td>--}}
-{{--                            <td>{{$fixWorkflow->EntireInstance->serial_number ?: '新设备'}}</td>--}}
-{{--                            <td>{{$fixWorkflow->status}}</td>--}}
-{{--                            <td>{{$fixWorkflow->stage}}</td>--}}
-{{--                            <td>--}}
-{{--                                <div class="btn-group btn-group-lg">--}}
-{{--                                    @if(array_flip(\App\Model\FixWorkflow::$STAGE)[$fixWorkflow->stage] == 'WAIT_CHECK')--}}
-{{--                                        <a href="{{url('measurement/fixWorkflow/create')}}?page={{request()->get('page',1)}}&type=CHECK&identity_code={{$fixWorkflow->EntireInstance->identity_code}}" class="btn btn-warning btn-flat">验收</a>--}}
-{{--                                        <a href="{{url('measurement/fixWorkflow',$fixWorkflow->serial_number)}}/edit?page={{request()->get('page',1)}}" class="btn btn-warning btn-flat">验收</a>--}}
-{{--                                    @else--}}
-{{--                                        <a href="{{url('measurement/fixWorkflow',$fixWorkflow->serial_number)}}/edit?page={{request()->get('page',1)}}" class="btn btn-primary btn-flat">详情</a>--}}
-{{--                                    @endif--}}
-{{--                                    <a href="javascript:" onclick="fnDelete('{{$fixWorkflow->serial_number}}')" class="btn btn-danger btn-flat">删除</a>--}}
-{{--                                </div>--}}
-{{--                            </td>--}}
                             <td>{{$v->id}}</td>
                             <td>{{$v->MaterialsCode}}</td>
                             <td>{{$v->MaterialsDescribe}}</td>
@@ -321,13 +201,23 @@
 {{--                                <a href="" class="btn btn-primary btn-flat">查看</a>--}}
 {{--                            </td>--}}
                             @if($v->Number!=$v->WMNumber)
-                            <td>账物不一致</td>
+                            <?php \Illuminate\Support\Facades\DB::table("wm")->where("id",$v->id)->update(["WMStatus"=>"账物不一致"]) ?>
+                            <td style="color: red">账物不一致</td>
                             <td>{{$v->Analyse}}</td>
                             <td>
                                 <a href="{{url("measurement/fixWorkflow/B04920190527094547_03_1558921547/edit?id=$v->id")}}" class="btn btn-primary btn-flat">查看</a>
                             </td>
+                            {{--strtotime("+物资使用年限 year","入库时间戳")与当前时间戳判断是否超期未出库--}}
+                            @elseif(strtotime(+\Illuminate\Support\Facades\DB::table("materials")->where("MaterialName",$v->MaterialsDescribe)->value("ServiceLife"). "year", \Illuminate\Support\Facades\DB::table("stockin")->where("id",$v->pid)->value("StockIn_time")) >= time())
+                            <?php \Illuminate\Support\Facades\DB::table("wm")->where("id",$v->id)->update(["WMStatus"=>"超期未出库"]) ?>
+                            <td style="color: darkred">超期未出库</td>
+                            <td></td>
+                            <td></td>
                             @else
-                            <td>盘点正常</td>
+                            <?php \Illuminate\Support\Facades\DB::table("wm")->where("id",$v->id)->update(["WMStatus"=>"盘点正常"]) ?>
+                            <td style="color: green">盘点正常</td>
+                            <td></td>
+                            <td></td>
                             @endif
 
                         </tr>
@@ -349,20 +239,29 @@
     <script src="/AdminLTE/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
     <script>
         $(function () {
-            if ($('.select2')) {
-                $('.select2').select2();
-            }
+            // if ($('.select2')) {
+            //     $('.select2').select2();
+            // }
             // iCheck for checkbox and radio inputs
-            if ($('input[type="checkbox"].minimal, input[type="radio"].minimal')) {
-                $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
-                    checkboxClass: 'icheckbox_minimal-blue',
-                    radioClass: 'iradio_minimal-blue'
-                });
-            }
-            if ($("#datapicker")) {
-                $('#datepicker').datepicker({
-                    autoclose: true,
-                    format: 'yyyy-mm-dd',
+            // if ($('input[type="checkbox"].minimal, input[type="radio"].minimal')) {
+            //     $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+            //         checkboxClass: 'icheckbox_minimal-blue',
+            //         radioClass: 'iradio_minimal-blue'
+            //     });
+            // }
+            if ($("#reservation")) {
+                $('#reservation').daterangepicker({
+                    locale: {
+                        applyLabel: '确定',
+                        cancelLabel: '取消',
+                        fromLabel: '起始时间',
+                        toLabel: '结束时间',
+                        format: "YYYY-MM-DD",
+                        separator: "~",
+                        daysOfWeek: ["日", "一", "二", "三", "四", "五", "六"],
+                        monthNames: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"]
+                    }
+
                 });
             }
         });

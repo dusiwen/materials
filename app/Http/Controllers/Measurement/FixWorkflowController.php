@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
+use function Hprose\Future\all;
 
 class FixWorkflowController extends Controller
 {
@@ -30,59 +31,67 @@ class FixWorkflowController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $date1 = date("Y-m-d",time());//获取当前月日
+//        dump($request->all());
+        $date1 = date("Y-m-d", time());//获取当前月日
 
         //1.获取传感器重量放到相应的盘点表中
-        $tray = DB::table("tray")->where("MaterialCode","!=",NULL)->get()->toArray();
-        foreach ($tray as $k=>$v){
+        $tray = DB::table("tray")->where("MaterialCode", "!=", NULL)->get()->toArray();
+        foreach ($tray as $k => $v) {
             $MaterialCode = $v->MaterialCode;  //获取物资编码
-            $MaterialName = $v->MaterialName;  //获取物资编码
+            $MaterialName = $v->MaterialName;  //获取物资名称
             $weights = $v->weights;  //获取传感器传回的重量值
-            if ($weights >100){
+            if ($weights > 10000) {
                 $weights = "0";
             }
-            $EachWeight = DB::table("materials")->where("MaterialCode",$MaterialCode)->get()->toArray();  //根据物资编码获取物资的每个重量
-            $weight = ceil($weights/$EachWeight[0]->EachWeight);  //数量向上取整(后期要改)
-            $wm = DB::table("wm")->where("MaterialsDescribe",$MaterialName)->update(["WMNumber"=>$weight]);
-            $wm = DB::table("tray")->where("MaterialCode",$MaterialCode)->update(["weight"=>$weights]);
+            $EachWeight = DB::table("materials")->where("MaterialCode", $MaterialCode)->get()->toArray();  //根据物资编码获取物资的每个重量
+            $weight = number_format($weights / $EachWeight[0]->EachWeight);  //四舍五入取整(后期要改)
+//            DB::table("wm")->where("MaterialsDescribe", $MaterialName)->update(["WMNumber" => $weight]);
+            DB::table("tray")->where("MaterialCode", $MaterialCode)->update(["weights" => $weights]);
         }
-        //2.获取wm盘点表所有数据
-        $wm = DB::table("wm")->orderBy("id","desc")->get()->toArray();
+        //2.获取wm盘点表数据
+        $wm = DB::table("wm");
+        if ($request->get("date1")) {
+            if (strpos($request->get("date1"), "~")) {
+                //从wm盘点页饼图进来
+            } else {
+                //从首页饼图进来(查询当天的wm表)
+                $date2 = [$request->get("date1"),$request->get("date1")];
+                $wm->whereBetween("WMDates", $date2);
+            }
+        }
+        if ($request->get("amp;name")){
+            if ($request->get("amp;name") == "账物不一致"){
+//                dump("账物不一致");
+//                $wm->whereRaw('Number != WMNumber');
+                $wm->where("WMStatus","账物不一致");
+            }elseif ($request->get("amp;name") == "超期未出库"){
+//                dump("超期未出库");
+                $wm->where("WMStatus","超期未出库");
+            }elseif ($request->get("amp;name") =="盘点正常"){
+//                dump("盘点正常");
+//                $wm->whereRaw('Number = WMNumber');
+                $wm->where("WMStatus","盘点正常");
+            }
+        }
+        $wm = $wm->orderBy("id", "desc")->get()->toArray();
 
 
-//        if (\request()->get('status') == 'CHECKED') {
-//            $fixWorkflows = FixWorkflow::with([
-//                'EntireInstance',
-//                'EntireInstance.Category',
-//                'EntireInstance.EntireModel',
-//                'EntireInstance.EntireModel.Category',
-//                'EntireInstance.EntireModel.Measurements',
-//                'EntireInstance.EntireModel.Measurements.PartModel',
-//                'Processor',
-//                'FixWorkflowProcesses'
-//            ])
-//                ->orderByDesc('updated_at')
-//                ->where('status', 'FIXED')
-//                ->paginate();
-//        } else {
-//            $fixWorkflows = FixWorkflow::with([
-//                'EntireInstance',
-//                'EntireInstance.Category',
-//                'EntireInstance.EntireModel',
-//                'EntireInstance.EntireModel.Category',
-//                'EntireInstance.EntireModel.Measurements',
-//                'EntireInstance.EntireModel.Measurements.PartModel',
-//                'Processor',
-//                'FixWorkflowProcesses'
-//            ])
-//                ->orderByDesc('updated_at')
-//                ->paginate();
-//        }
+        //首页差异动态分析
+        $count = DB::table("wm")->count();  //获取总条数
+        //账物不一致数量
+        $byz = DB::table("wm")->where("WMStatus","账物不一致")->count();
+        //盘点正常数量
+        $zc = DB::table("wm")->where("WMStatus","盘点正常")->count();
+        //超期未出库
+        $cq = DB::table("wm")->where("WMStatus","超期未出库")->count();
 
         return view($this->view())
             ->with('date1', $date1)
+            ->with("byz", $byz)
+            ->with("zc", $zc)
+            ->with("cq", $cq)
             ->with('wm', $wm);
     }
 
@@ -207,7 +216,7 @@ class FixWorkflowController extends Controller
     {
         try {
             $id = $_GET['id'];
-            $differ = DB::table("wm")->where("id",$id)->get()->toArray();  //获取对应id盘点差异分析表
+            $differ = DB::table("wm")->where("id", $id)->get()->toArray();  //获取对应id盘点差异分析表
             $fixWorkflow = FixWorkflow::with([
                 'EntireInstance',
                 'EntireInstance.EntireModel',
@@ -382,7 +391,7 @@ class FixWorkflowController extends Controller
         try {
 //            $fixWorkflow = FixWorkflow::where('serial_number', $serialNumber)->firstOrFail();
 //            $fixWorkflow->fill($request->all())->saveOrFail();
-            DB::table("wm")->where("id",$id)->update(["Analyse"=>$request->input("note")]);
+            DB::table("wm")->where("id", $id)->update(["Analyse" => $request->input("note")]);
             return Response::make('编辑成功');
         } catch (ModelNotFoundException $exception) {
             return Response::make('数据不存在', 404);

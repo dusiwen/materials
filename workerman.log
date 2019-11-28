@@ -1,0 +1,5 @@
+2019-09-05 00:17:28 pid:7675 Workerman[weight.php] stop 
+2019-09-05 00:17:28 pid:7675 Workerman[weight.php] not run
+2019-09-05 00:17:33 pid:7676 Workerman[weight.php] start in DAEMON mode
+2019-09-05 00:17:53 pid:5314 Worker[5314] process terminated
+2019-09-05 00:24:09 pid:2204 Workerman[weight.php] start in DAEMON mode

@@ -96,23 +96,23 @@
                 <table class="table table-hover table-condensed" id="table">
                     <thead>
                     <tr>
-                        <th>#</th>
-                        <th>物资编码</th>
-                        <th>物资名称</th>
-                        <th>批次</th>
-                        <th>单位</th>
-                        <th>数量</th>
-                        <th>总重量(kg)</th>
-                        <th>单价(元)</th>
-                        <th>金额(元)</th>
-                        <th>项目名称</th>
-{{--                        <th>时间</th>--}}
-{{--                        <th>供应商</th>--}}
-                        <th>状态</th>
-                        <th>入库类型</th>
-                        <th>入库时间</th>
-                        <th>备注</th>
-                        <th>操作</th>
+                        <th style="text-align: center">#</th>
+                        <th style="text-align: center">物资编码</th>
+                        <th style="text-align: center">物资名称</th>
+                        <th style="text-align: center">批次</th>
+                        <th style="text-align: center">单位</th>
+                        <th style="text-align: center">数量</th>
+                        <th style="text-align: center">总重量(kg)</th>
+                        <th style="text-align: center">单价(元)</th>
+                        <th style="text-align: center">金额(元)</th>
+                        <th style="text-align: center">项目名称</th>
+{{--                        <th style=text-align: center;>时间</th>--}}
+{{--                        <th style=text-align: center;>供应商</th>--}}
+                        <th style="text-align: center">状态</th>
+                        <th style="text-align: center">入库类型</th>
+                        <th style="text-align: center">入库时间</th>
+                        <th style="text-align: center">备注</th>
+                        <th style="text-align: center">操作</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -122,22 +122,22 @@
                             @if($k == 0)
                             <th rowspan="{{count([$v])}}">{{$v->id}}</th>
                             @else
-                                <th></th>
+                                <th style="text-align: center"></th>
                             @endif
-                            <th>{{$v->StockIn_MaterialCode}}</th>
-                            <th>{{$v->StockIn_MaterialName}}</th>
-                            <th>{{$v->StockIn_Batch}}</th>
-                            <th>{{$v->StockIn_Unit}}</th>
-                            <th>{{$v->StockIn_Number}}</th>
-                            <th>{{$v->StockIn_Weight}}</th>
-                            <th>{{$v->StockIn_Price}}</th>
-                            <th>{{$v->StockIn_Sum}}</th>
-                            <th>{{$v->StockIn_ProjectName}}</th>
-{{--                            <th>宁夏</th>--}}
-                            <th>{{$v->StockIn_Status}}</th>
-                            <th>{{$v->StockIn_Type}}</th>
-                            <th>{{$v->StockIn_times}}</th>
-                            <th>{{$v->StockIn_Remark}}</th>
+                            <th style="text-align: center">{{$v->StockIn_MaterialCode}}</th>
+                            <th style="text-align: center">{{$v->StockIn_MaterialName}}</th>
+                            <th style="text-align: center">{{$v->StockIn_Batch}}</th>
+                            <th style="text-align: center">{{$v->StockIn_Unit}}</th>
+                            <th style="text-align: center">{{$v->StockIn_Number}}</th>
+                            <th style="text-align: center">{{$v->StockIn_Weight}}</th>
+                            <th style="text-align: center">{{$v->StockIn_Price}}</th>
+                            <th style="text-align: center">{{$v->StockIn_Sum}}</th>
+                            <th style="text-align: center">{{$v->StockIn_ProjectName}}</th>
+{{--                            <th style=text-align: center;>宁夏</th>--}}
+                            <th style="text-align: center">{{$v->StockIn_Status}}</th>
+                            <th style="text-align: center">{{$v->StockIn_Type}}</th>
+                            <th style="text-align: center">{{$v->StockIn_times}}</th>
+                            <th style="text-align: center">{{$v->StockIn_Remark}}</th>
                             @if($k == 0)
                             @if($v->StockIn_Status == "未入库")
                                 <td>
@@ -207,6 +207,10 @@
             $('#reservation').daterangepicker({
 
                 locale: {
+                    applyLabel: '确定',
+                    cancelLabel: '取消',
+                    fromLabel: '起始时间',
+                    toLabel: '结束时间',
                     format: "YYYY-MM-DD",
                     separator: "~",
                     daysOfWeek: ["日", "一", "二", "三", "四", "五", "六"],

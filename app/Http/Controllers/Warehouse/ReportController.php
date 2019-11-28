@@ -25,27 +25,6 @@ class ReportController extends Controller
      */
     public function index(Request $request)
     {
-
-//        $str = file_get_contents('../workerman/stdoutFile.txt');
-//
-//        //用换行的分割符（\r\n）把字符串分割为数组，也就是把每一行分割为成数组的一个值
-//
-//        $array = explode("\r\n",$str);
-//        for ($i=0;$i<count($array);$i++){
-//            $url=$array[$i];
-//        }
-//        //可以根据自己需要，循环输出从开始行到结束行的内容
-//        //示例：输出文本中第4行内容（因为数组的键值是从0开始的，所以第4行也就是键值3）
-//        $weight = hexdec(substr($array[$i-4],54,4)); //16进制转为10进制获取重量
-//        $warehouseReportModel = WarehouseReport::with(['Processor', 'WarehouseReportEntireInstances', 'WarehouseReportEntireInstances.EntireInstance'])->orderByDesc('updated_at');
-//        if (\request()->get('direction')) $warehouseReportModel->where('direction', \request()->get('direction'));
-//        if (\request()->get('category_unique_code')) $warehouseReportModel->whereHas('WarehouseReportEntireInstances.EntireInstance', function ($entireInstance) {
-//            $entireInstance->where('category_unique_code', \request()->get('category_unique_code'));
-//        });
-//        if (\request()->get('type')) $warehouseReportModel->where('type', \request()->get('type'));
-//        if (\request()->get('updated_at')) $warehouseReportModel->whereBetween('updated_at', explode('~', \request()->get('updated_at')));
-//        $warehouseReports = $warehouseReportModel->paginate();
-
         //入库单页面筛选功能
         $stockin = DB::table("stockin");
         if ($request->get('project')) $stockin->where("StockIn_ProjectName",$request->get("project"));
@@ -233,7 +212,7 @@ class ReportController extends Controller
                 }else{
                     $MaterialsCode = $code->MaterialsCode+1;
                 }
-                DB::table("wm")->insert(["Company"=>$v->StockIn_Units,"WMcode"=>$mt_rand,"MaterialsCode"=>$MaterialsCode,"MaterialsDescribe"=>$v->StockIn_MaterialName,"StorageType"=>"G01","Positions"=>"G01-010101","Unit"=>$v->StockIn_Unit,"WarehouseNumber"=>"EBA","Number"=>$v->StockIn_Number,"Location"=>"YEBA","WMDate"=>$times,"time"=>$date[0]->time,"pid"=>$v->id]);//入库单生成盘点表
+                DB::table("wm")->insert(["Company"=>$v->StockIn_Units,"WMcode"=>$mt_rand,"MaterialsCode"=>$MaterialsCode,"MaterialsDescribe"=>$v->StockIn_MaterialName,"StorageType"=>"G01","Positions"=>"G01-010101","Unit"=>$v->StockIn_Unit,"WarehouseNumber"=>"EBA","Number"=>$v->StockIn_Number,"Location"=>"YEBA","WMDate"=>$times,"WMDates"=>$data,"time"=>$date[0]->time,"pid"=>$v->id]);//入库单生成盘点表
 
             }
             DB::table("stockin")->where("time",$date[0]->time)->update(["StockIn_Status"=>"已入库"]);//入库后修改入库状态状态

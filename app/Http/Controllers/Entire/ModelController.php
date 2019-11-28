@@ -144,8 +144,10 @@ class ModelController extends Controller
             //将选择的物资存入session后,获取session值
             if (!empty($request->session()->get("MaterialsId"))){
                 $MaterialsId = $request->session()->get("MaterialsId");//若不为空则传值
+//                dump($MaterialsId);
                 $MaterialsIds= DB::table('materials')->where('id',$MaterialsId)->select("MaterialName")->get()->toArray();
                 $MaterialName = $MaterialsIds[0]->MaterialName;//获取物资名称
+//                dump($MaterialName);
             }else{
                 $MaterialName = '';
                 $EachWeight = '';
@@ -154,24 +156,30 @@ class ModelController extends Controller
             if (!empty($MaterialsId)){
                 //智能匹配出最适合的托盘
                 $MaterialCode= DB::table('materials')->where('id',$MaterialsId)->select("MaterialCode","EachWeight")->get()->toArray();
+//                $MaterialCode= DB::table('materials')->where('id',$MaterialsId)->first(["MaterialCode","EachWeight"]);
+
                 $MaterialCodes = $MaterialCode[0]->MaterialCode;//获取物资编码
                 $EachWeight = $MaterialCode[0]->EachWeight;//获取每个物资重量
+//                DB::connection()->enableQueryLog();
                 $tray = DB::table("tray")->where('MaterialCode',$MaterialCodes)->where('ResidueWeight','>',$EachWeight)->get()->toArray();
-//                dd($tray);
+//                $t = Tray::where('MaterialCode',$MaterialCodes)->where('ResidueWeight','>',$EachWeight)->get()->toArray();
+//                dump($t);
+//                dump(DB::getQueryLog());
+//                dump($tray);
                 $trays = DB::table("tray")->where('MaterialCode',NULL)->get()->toArray();
 //                $tray = Tray::where('MaterialCode',$MaterialCodes)->where('ResidueWeight','>',$EachWeight)->get()->toArray();
 //                dd($tray);
 //                $trays = Tray::all()->toArray();//获取所有托盘信息
 //                dd($trays);
-//                dd($trays);
-                foreach ($trays as $k=>$v){
-                    $tray[] =$v;
-//                    dd($v);
-                }
+                $tray = array_merge($tray,$trays);
+
+//                foreach ($trays as $k=>$v){
+//                    $tray[] =$v;
+////                    dd($v);
+//                }
                 $tray= array_unique($tray, SORT_REGULAR);
-//                dd($tray);
             }else{
-                $tray = DB::table("tray")->get()->toArray(); //获取所有托盘信息
+                $tray = DB::table("tray")->orderByDesc("MaterialName")->get()->toArray(); //获取所有托盘信息
             }
             $i = 1;
             return view($this->view('edit'))
@@ -191,7 +199,7 @@ class ModelController extends Controller
             $exceptionMessage = $exception->getMessage();
             $exceptionLine = $exception->getLine();
             $exceptionFile = $exception->getFile();
-            // dd("{$exceptionMessage}「{$exceptionLine}:{$exceptionFile}」");
+             dd("{$exceptionMessage}「{$exceptionLine}:{$exceptionFile}」");
             // return back()->withInput()->with('danger',"{$exceptionMessage}「{$exceptionLine}:{$exceptionFile}」");
             return back()->with('danger', '意外错误' . $exceptionMessage);
         }

@@ -229,9 +229,9 @@ class InstanceController extends Controller
 
 
             $time = time();  //添加托盘的时间戳
-            $GrossWeight = 20;  //托盘毛重
+            $GrossWeight = 0;  //托盘毛重
             $weight = 0;  //物资重量
-            $ResidueWeight = $request->input("max") - $GrossWeight - $weight;
+            $ResidueWeight = $request->input("max");
             $date = ["GrossWeight"=>$GrossWeight,"weight"=>$weight,"ResidueWeight"=>$ResidueWeight,"tray_code"=>$request->input("tray_code"),"min"=>$request->input("min"),"max"=>$request->input("max"),"precision"=>$request->input("precision"),"place"=>$request->input("place"),"time"=>$time];
             $add = DB::table("tray")->insert($date);
             if ($add){
